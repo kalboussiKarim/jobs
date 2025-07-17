@@ -18,7 +18,7 @@ const MainContent: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   return (
-    <main className="min-h-screen transition-colors duration-300">
+    <div className="transition-colors duration-300">
       {/* Section 1: Hero Section */}
       <section
         id="home"
@@ -149,7 +149,7 @@ const MainContent: React.FC = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
               <h2 className="text-3xl md:text-4xl font-bold mb-6 text-gray-800 dark:text-white">
-                Why Choose Us?
+                {t("WhyChooseUs")}
               </h2>
               <p className="text-lg text-gray-600 dark:text-gray-300 mb-8">
                 We combine years of experience with cutting-edge technology to
@@ -197,7 +197,7 @@ const MainContent: React.FC = () => {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
       />
-    </main>
+    </div>
   );
 };
 

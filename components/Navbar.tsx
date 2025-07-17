@@ -43,7 +43,7 @@ const Navbar: React.FC = () => {
           <div className="flex items-center">
             <div className="flex-shrink-0">
               <h1 className="text-xl font-bold text-gray-800 dark:text-white">
-                MyApp
+                Horizon Talents
               </h1>
             </div>
           </div>

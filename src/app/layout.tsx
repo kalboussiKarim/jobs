@@ -16,13 +16,15 @@ interface RootLayoutProps {
 
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
         <ThemeProvider>
           <LanguageProvider>
-            <Navbar />
-            <main>{children}</main>
-            <Footer />
+            <div className="min-h-screen flex flex-col">
+              <Navbar />
+              <main className="flex-grow">{children}</main>
+              <Footer />
+            </div>
           </LanguageProvider>
         </ThemeProvider>
       </body>

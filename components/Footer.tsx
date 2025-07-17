@@ -68,7 +68,9 @@ const Footer: React.FC = () => {
           {/* Company Info */}
           <div className="lg:col-span-1">
             <div className="mb-6">
-              <h2 className="text-2xl font-bold text-white mb-4">MyApp</h2>
+              <h2 className="text-2xl font-bold text-white mb-4">
+                Horizon Talents
+              </h2>
               <p className="text-gray-300 text-sm leading-relaxed">
                 {t("footerDescription")}
               </p>
@@ -184,7 +186,7 @@ const Footer: React.FC = () => {
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             {/* Copyright */}
             <div className="text-gray-400 text-sm">
-              © {currentYear} MyApp. {t("allRightsReserved")}
+              © {currentYear} Horizon Talents. {t("allRightsReserved")}
             </div>
 
             {/* Legal Links */}
