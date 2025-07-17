@@ -7,6 +7,7 @@ import { LanguageProvider } from "../../lib/LanguageContext";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import { ThemeProvider } from "../../lib/ThemeContext";
+import WhatsAppBubble from "../../components/WhatsAppBubble";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,6 +25,11 @@ export default function RootLayout({ children }: RootLayoutProps) {
               <Navbar />
               <main className="flex-grow">{children}</main>
               <Footer />
+              <WhatsAppBubble
+                phoneNumber="1234567890"
+                message="Hello! I'm interested in your services."
+                position="bottom-right"
+              />
             </div>
           </LanguageProvider>
         </ThemeProvider>
