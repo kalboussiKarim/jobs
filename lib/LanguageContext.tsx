@@ -59,6 +59,7 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({
       contactDescription:
         "Ready to start your journey? Get in touch with us today.",
       openForm: "Open Contact Form",
+      WhyChooseUs: "Why Choose Us?",
       // Cards
       cardTitle1: "Innovation",
       cardDesc1: "Cutting-edge technology solutions",
@@ -66,6 +67,29 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({
       cardDesc2: "Quality service and support",
       cardTitle3: "Growth",
       cardDesc3: "Scalable solutions for your business",
+      // Footer translations
+      footerDescription:
+        "We provide cutting-edge solutions that transform your business and drive success in the digital age.",
+      quickLinks: "Quick Links",
+
+      webDevelopment: "Web Development",
+      mobileApps: "Mobile Apps",
+      consulting: "Consulting",
+      support: "Support",
+      company: "Company",
+
+      careers: "Careers",
+      blog: "Blog",
+      news: "News",
+      contactInfo: "Contact Info",
+      address: "123 Business Street, City, Country",
+      phone: "+1 (555) 123-4567",
+      email: "info@myapp.com",
+      followUs: "Follow Us",
+      allRightsReserved: "All rights reserved.",
+      privacyPolicy: "Privacy Policy",
+      termsOfService: "Terms of Service",
+      cookiePolicy: "Cookie Policy",
     },
     fr: {
       home: "Accueil",
@@ -79,6 +103,7 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({
         "Nous fournissons des solutions de pointe qui transforment votre entreprise et stimulent le succès à l'ère numérique.",
       learnMore: "En savoir plus",
       ourServices: "Nos Services",
+      WhyChooseUs: "pk nous choisir?",
       servicesDescription:
         "Nous offrons des solutions complètes adaptées à vos besoins",
       aboutUs: "À Propos de Nous",
@@ -95,6 +120,29 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({
       cardDesc2: "Service et support de qualité",
       cardTitle3: "Croissance",
       cardDesc3: "Solutions évolutives pour votre entreprise",
+      // Footer translations
+      footerDescription:
+        "Nous fournissons des solutions de pointe qui transforment votre entreprise et stimulent le succès à l'ère numérique.",
+      quickLinks: "Liens Rapides",
+
+      webDevelopment: "Développement Web",
+      mobileApps: "Applications Mobiles",
+      consulting: "Conseil",
+      support: "Support",
+      company: "Entreprise",
+
+      careers: "Carrières",
+      blog: "Blog",
+      news: "Actualités",
+      contactInfo: "Informations de Contact",
+      address: "123 Rue des Affaires, Ville, Pays",
+      phone: "+1 (555) 123-4567",
+      email: "info@myapp.com",
+      followUs: "Suivez-nous",
+      allRightsReserved: "Tous droits réservés.",
+      privacyPolicy: "Politique de Confidentialité",
+      termsOfService: "Conditions d'Utilisation",
+      cookiePolicy: "Politique des Cookies",
     },
     de: {
       home: "Startseite",
@@ -108,6 +156,7 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({
         "Wir bieten modernste Lösungen, die Ihr Unternehmen transformieren und Erfolg im digitalen Zeitalter vorantreiben.",
       learnMore: "Mehr erfahren",
       ourServices: "Unsere Dienstleistungen",
+      WhyChooseUs: "Warum uns wählen?",
       servicesDescription:
         "Wir bieten umfassende Lösungen, die auf Ihre Bedürfnisse zugeschnitten sind",
       aboutUs: "Über Uns",
@@ -124,6 +173,29 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({
       cardDesc2: "Qualitätsservice und Support",
       cardTitle3: "Wachstum",
       cardDesc3: "Skalierbare Lösungen für Ihr Unternehmen",
+      // Footer translations
+      footerDescription:
+        "Wir bieten modernste Lösungen, die Ihr Unternehmen transformieren und Erfolg im digitalen Zeitalter vorantreiben.",
+      quickLinks: "Schnelllinks",
+
+      webDevelopment: "Webentwicklung",
+      mobileApps: "Mobile Apps",
+      consulting: "Beratung",
+      support: "Support",
+      company: "Unternehmen",
+
+      careers: "Karriere",
+      blog: "Blog",
+      news: "Nachrichten",
+      contactInfo: "Kontaktinformationen",
+      address: "123 Geschäftsstraße, Stadt, Land",
+      phone: "+1 (555) 123-4567",
+      email: "info@myapp.com",
+      followUs: "Folgen Sie uns",
+      allRightsReserved: "Alle Rechte vorbehalten.",
+      privacyPolicy: "Datenschutzrichtlinie",
+      termsOfService: "Nutzungsbedingungen",
+      cookiePolicy: "Cookie-Richtlinie",
     },
   };
 
