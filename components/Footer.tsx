@@ -52,11 +52,11 @@ const Footer: React.FC = () => {
   ];
 
   return (
-    <footer className="bg-gray-900 text-white relative">
+    <footer className="bg-gray-900 dark:bg-gray-950 text-white relative transition-colors duration-300">
       {/* Back to top button */}
       <button
         onClick={scrollToTop}
-        className="absolute -top-6 right-8 bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-full shadow-lg transition-colors"
+        className="absolute -top-6 right-8 bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 text-white p-3 rounded-full shadow-lg transition-colors"
         aria-label="Back to top"
       >
         <ArrowUp className="h-6 w-6" />
@@ -71,20 +71,22 @@ const Footer: React.FC = () => {
               <h2 className="text-2xl font-bold text-white mb-4">
                 Horizon Talents
               </h2>
-              <p className="text-gray-300 text-sm leading-relaxed">
+              <p className="text-gray-300 dark:text-gray-400 text-sm leading-relaxed">
                 {t("footerDescription")}
               </p>
             </div>
 
             {/* Social Media Links */}
             <div>
-              <h3 className="text-lg font-semibold mb-4">{t("followUs")}</h3>
+              <h3 className="text-lg font-semibold mb-4 text-white">
+                {t("followUs")}
+              </h3>
               <div className="flex space-x-4">
                 {socialLinks.map((social, index) => (
                   <a
                     key={index}
                     href={social.href}
-                    className="text-gray-400 hover:text-white transition-colors"
+                    className="text-gray-400 dark:text-gray-500 hover:text-white dark:hover:text-gray-200 transition-colors"
                     aria-label={social.label}
                   >
                     <social.icon className="h-6 w-6" />
@@ -96,13 +98,15 @@ const Footer: React.FC = () => {
 
           {/* Quick Links */}
           <div>
-            <h3 className="text-lg font-semibold mb-6">{t("quickLinks")}</h3>
+            <h3 className="text-lg font-semibold mb-6 text-white">
+              {t("quickLinks")}
+            </h3>
             <ul className="space-y-3">
               {quickLinks.map((link) => (
                 <li key={link.key}>
                   <a
                     href={link.href}
-                    className="text-gray-300 hover:text-white transition-colors text-sm"
+                    className="text-gray-300 dark:text-gray-400 hover:text-white dark:hover:text-gray-200 transition-colors text-sm"
                   >
                     {t(link.key)}
                   </a>
@@ -113,13 +117,15 @@ const Footer: React.FC = () => {
 
           {/* Services */}
           <div>
-            <h3 className="text-lg font-semibold mb-6">{t("services")}</h3>
+            <h3 className="text-lg font-semibold mb-6 text-white">
+              {t("services")}
+            </h3>
             <ul className="space-y-3">
               {serviceLinks.map((service) => (
                 <li key={service.key}>
                   <a
                     href={service.href}
-                    className="text-gray-300 hover:text-white transition-colors text-sm"
+                    className="text-gray-300 dark:text-gray-400 hover:text-white dark:hover:text-gray-200 transition-colors text-sm"
                   >
                     {t(service.key)}
                   </a>
@@ -130,28 +136,32 @@ const Footer: React.FC = () => {
 
           {/* Contact Info */}
           <div>
-            <h3 className="text-lg font-semibold mb-6">{t("contactInfo")}</h3>
+            <h3 className="text-lg font-semibold mb-6 text-white">
+              {t("contactInfo")}
+            </h3>
             <div className="space-y-4">
               <div className="flex items-start space-x-3">
-                <MapPin className="h-5 w-5 text-gray-400 mt-0.5 flex-shrink-0" />
-                <p className="text-gray-300 text-sm">{t("address")}</p>
+                <MapPin className="h-5 w-5 text-gray-400 dark:text-gray-500 mt-0.5 flex-shrink-0" />
+                <p className="text-gray-300 dark:text-gray-400 text-sm">
+                  {t("address")}
+                </p>
               </div>
 
               <div className="flex items-center space-x-3">
-                <Phone className="h-5 w-5 text-gray-400 flex-shrink-0" />
+                <Phone className="h-5 w-5 text-gray-400 dark:text-gray-500 flex-shrink-0" />
                 <a
                   href={`tel:${t("phone")}`}
-                  className="text-gray-300 hover:text-white transition-colors text-sm"
+                  className="text-gray-300 dark:text-gray-400 hover:text-white dark:hover:text-gray-200 transition-colors text-sm"
                 >
                   {t("phone")}
                 </a>
               </div>
 
               <div className="flex items-center space-x-3">
-                <Mail className="h-5 w-5 text-gray-400 flex-shrink-0" />
+                <Mail className="h-5 w-5 text-gray-400 dark:text-gray-500 flex-shrink-0" />
                 <a
                   href={`mailto:${t("email")}`}
-                  className="text-gray-300 hover:text-white transition-colors text-sm"
+                  className="text-gray-300 dark:text-gray-400 hover:text-white dark:hover:text-gray-200 transition-colors text-sm"
                 >
                   {t("email")}
                 </a>
@@ -161,18 +171,18 @@ const Footer: React.FC = () => {
         </div>
 
         {/* Newsletter Signup */}
-        <div className="mt-12 pt-8 border-t border-gray-800">
+        <div className="mt-12 pt-8 border-t border-gray-800 dark:border-gray-700">
           <div className="max-w-md mx-auto text-center">
-            <h3 className="text-lg font-semibold mb-4">
+            <h3 className="text-lg font-semibold mb-4 text-white">
               Subscribe to our Newsletter
             </h3>
             <div className="flex flex-col sm:flex-row gap-3">
               <input
                 type="email"
                 placeholder="Enter your email"
-                className="flex-1 px-4 py-2 bg-gray-800 border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white placeholder-gray-400"
+                className="flex-1 px-4 py-2 bg-gray-800 dark:bg-gray-900 border border-gray-700 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white placeholder-gray-400 dark:placeholder-gray-500 transition-colors"
               />
-              <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md font-medium transition-colors">
+              <button className="bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 text-white px-6 py-2 rounded-md font-medium transition-colors">
                 Subscribe
               </button>
             </div>
@@ -181,11 +191,11 @@ const Footer: React.FC = () => {
       </div>
 
       {/* Bottom bar */}
-      <div className="border-t border-gray-800">
+      <div className="border-t border-gray-800 dark:border-gray-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             {/* Copyright */}
-            <div className="text-gray-400 text-sm">
+            <div className="text-gray-400 dark:text-gray-500 text-sm">
               © {currentYear} Horizon Talents. {t("allRightsReserved")}
             </div>
 
@@ -193,19 +203,19 @@ const Footer: React.FC = () => {
             <div className="flex flex-wrap justify-center md:justify-end space-x-6">
               <a
                 href="#"
-                className="text-gray-400 hover:text-white transition-colors text-sm"
+                className="text-gray-400 dark:text-gray-500 hover:text-white dark:hover:text-gray-200 transition-colors text-sm"
               >
                 {t("privacyPolicy")}
               </a>
               <a
                 href="#"
-                className="text-gray-400 hover:text-white transition-colors text-sm"
+                className="text-gray-400 dark:text-gray-500 hover:text-white dark:hover:text-gray-200 transition-colors text-sm"
               >
                 {t("termsOfService")}
               </a>
               <a
                 href="#"
-                className="text-gray-400 hover:text-white transition-colors text-sm"
+                className="text-gray-400 dark:text-gray-500 hover:text-white dark:hover:text-gray-200 transition-colors text-sm"
               >
                 {t("cookiePolicy")}
               </a>
