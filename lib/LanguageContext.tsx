@@ -90,6 +90,8 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({
       privacyPolicy: "Privacy Policy",
       termsOfService: "Terms of Service",
       cookiePolicy: "Cookie Policy",
+      //WhatsApp Bubble
+      Needhelp: "Need help? Chat with us!",
     },
     fr: {
       home: "Accueil",
@@ -103,7 +105,7 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({
         "Nous fournissons des solutions de pointe qui transforment votre entreprise et stimulent le succès à l'ère numérique.",
       learnMore: "En savoir plus",
       ourServices: "Nos Services",
-      WhyChooseUs: "pk nous choisir?",
+      WhyChooseUs: "Pourquoi nous choisir ?",
       servicesDescription:
         "Nous offrons des solutions complètes adaptées à vos besoins",
       aboutUs: "À Propos de Nous",
@@ -143,6 +145,8 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({
       privacyPolicy: "Politique de Confidentialité",
       termsOfService: "Conditions d'Utilisation",
       cookiePolicy: "Politique des Cookies",
+      //WhatsApp Bubble
+      Needhelp: "Besoin d'aide ? Discutez avec nous !",
     },
     de: {
       home: "Startseite",
@@ -196,6 +200,8 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({
       privacyPolicy: "Datenschutzrichtlinie",
       termsOfService: "Nutzungsbedingungen",
       cookiePolicy: "Cookie-Richtlinie",
+      //WhatsApp Bubble
+      Needhelp: "Brauchen Sie Hilfe? Chatten Sie mit uns!",
     },
   };
 

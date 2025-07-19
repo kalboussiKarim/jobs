@@ -17,19 +17,15 @@ interface RootLayoutProps {
 
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={inter.className}>
+    <html lang="en">
+      <body className={inter.className} suppressHydrationWarning>
         <ThemeProvider>
           <LanguageProvider>
             <div className="min-h-screen flex flex-col">
               <Navbar />
               <main className="flex-grow">{children}</main>
               <Footer />
-              <WhatsAppBubble
-                phoneNumber="1234567890"
-                message="Hello! I'm interested in your services."
-                position="bottom-right"
-              />
+              <WhatsAppBubble />
             </div>
           </LanguageProvider>
         </ThemeProvider>
