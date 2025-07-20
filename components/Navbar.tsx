@@ -32,7 +32,7 @@ const Navbar: React.FC = () => {
     { key: "home", href: "#home" },
     { key: "about", href: "#about" },
     { key: "services", href: "#services" },
-    { key: "contact", href: "#contact" },
+    { key: "apply", href: "#apply" },
   ];
 
   return (
