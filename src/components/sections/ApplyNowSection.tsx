@@ -1,19 +1,15 @@
 import React from "react";
-import StatsSection from "../StatsSection";
+
 import { Mail } from "lucide-react";
+import { useRouter } from "next/navigation";
 
-interface ApplyNowSectionProps {
-  openModal: () => void;
-}
-
-const ApplyNowSection: React.FC<ApplyNowSectionProps> = ({ openModal }) => {
+const ApplyNowSection: React.FC = () => {
+  const router = useRouter();
   return (
     <section
       id="apply"
       className="py-20 bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-800 dark:via-gray-900 dark:to-gray-800 transition-all duration-300 relative overflow-hidden"
     >
-      <StatsSection />
-
       {/* Background animations */}
       <div className="absolute inset-0 opacity-20">
         <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-blue-300 rounded-full blur-xl animate-pulse"></div>
@@ -38,7 +34,7 @@ const ApplyNowSection: React.FC<ApplyNowSectionProps> = ({ openModal }) => {
           {/* Apply Now Button */}
           <div className="relative inline-block">
             <button
-              onClick={openModal}
+              onClick={() => router.push("/apply")}
               className="group relative overflow-hidden bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white px-12 py-4 rounded-full font-bold text-lg shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-1000"
             >
               {/* Hover gradient background */}

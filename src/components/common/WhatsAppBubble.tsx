@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { X } from "lucide-react";
-import { useLanguage } from "../lib/LanguageContext";
+import { useLanguage } from "../../lib/LanguageContext";
 
 interface WhatsAppBubbleProps {
   phoneNumber?: string;
@@ -24,7 +24,7 @@ const WhatsAppBubble: React.FC<WhatsAppBubbleProps> = ({
     const timer = setTimeout(() => {
       setIsVisible(true);
       setTimeout(() => setShowTooltip(true), 1000);
-      setTimeout(() => setShowTooltip(false), 6000);
+      // setTimeout(() => setShowTooltip(false), 10000);
     }, 3000);
 
     return () => clearTimeout(timer);

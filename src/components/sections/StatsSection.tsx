@@ -103,7 +103,7 @@ const StatsSection: React.FC = () => {
   ];
 
   return (
-    <section className="bg-gradient-to-r from-blue-600 to-purple-700 dark:from-blue-800 dark:to-purple-900 py-16 md:py-20 relative overflow-hidden mb-16">
+    <section className="bg-gradient-to-r from-blue-600 to-purple-700 dark:from-blue-800 dark:to-purple-900 py-16 md:py-20 relative overflow-hidden mb-0">
       {/* Animated background elements */}
       <div className="absolute inset-0 opacity-10">
         <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-white rounded-full blur-3xl animate-pulse"></div>

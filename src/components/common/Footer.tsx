@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { useLanguage } from "../lib/LanguageContext";
+import { useLanguage } from "../../lib/LanguageContext";
 import {
   MapPin,
   Phone,
@@ -13,6 +13,7 @@ import {
   Github,
   ArrowUp,
 } from "lucide-react";
+import { usePathname } from "next/navigation";
 
 const Footer: React.FC = () => {
   const { t } = useLanguage();
@@ -51,16 +52,20 @@ const Footer: React.FC = () => {
     { icon: Github, href: "#", label: "GitHub" },
   ];
 
+  const pathname = usePathname();
+
   return (
     <footer className="bg-gray-900 dark:bg-gray-950 text-white relative transition-colors duration-300">
       {/* Back to top button */}
-      <button
-        onClick={scrollToTop}
-        className="absolute -top-6 right-8 bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 text-white p-3 rounded-full shadow-lg transition-colors"
-        aria-label="Back to top"
-      >
-        <ArrowUp className="h-6 w-6" />
-      </button>
+      {pathname != "/apply" && (
+        <button
+          onClick={scrollToTop}
+          className="absolute -top-6 right-8 bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 text-white p-3 rounded-full shadow-lg transition-colors"
+          aria-label="Back to top"
+        >
+          <ArrowUp className="h-6 w-6" />
+        </button>
+      )}
 
       {/* Main footer content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
