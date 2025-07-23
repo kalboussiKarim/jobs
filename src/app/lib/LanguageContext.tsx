@@ -1,16 +1,23 @@
 "use client";
 
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from "react";
+
+import en from "../locales/en.json";
+import fr from "../locales/fr.json";
+import de from "../locales/de.json";
 
 type TranslationValue = string | { [key: string]: TranslationValue };
-
-interface Translations {
-  [languageCode: string]: TranslationValue;
-}
+type Translations = Record<string, TranslationValue>;
 
 interface LanguageContextType {
   language: string;
-  setLanguage: (language: string) => void;
+  setLanguage: (lang: string) => void;
   t: (key: string) => string;
 }
 
@@ -30,39 +37,55 @@ interface LanguageProviderProps {
   children: ReactNode;
 }
 
+const allTranslations: Record<string, Translations> = {
+  en,
+  fr,
+  de,
+};
+
 export const LanguageProvider: React.FC<LanguageProviderProps> = ({
   children,
 }) => {
-  const [language, setLanguage] = useState<string>("en");
+  const [language, setLanguageState] = useState("en");
 
-  const translations: Translations = {
+  useEffect(() => {
+    const storedLang = localStorage.getItem("lang");
+    if (storedLang) {
+      setLanguageState(storedLang);
+    }
+  }, []);
+
+  const setLanguage = (lang: string) => {
+    setLanguageState(lang);
+    localStorage.setItem("lang", lang);
+  };
+
+  const t = (key: string): string => {
+    const keys = key.split(".");
+    let result: any = allTranslations[language];
+
+    for (const k of keys) {
+      if (typeof result !== "object" || result === null || !(k in result)) {
+        return key;
+      }
+      result = result[k];
+    }
+
+    return typeof result === "string" ? result : key;
+  };
+
+  return (
+    <LanguageContext.Provider value={{ language, setLanguage, t }}>
+      {children}
+    </LanguageContext.Provider>
+  );
+};
+/* const translations: Translations = {
     en: {
-      common: {
-        home: "Home",
-        about: "About",
-        services: "Services",
-        contact: "Contact",
-        language: "Language",
-        apply: "Apply Now",
-      },
-
-      hero: {
-        title: "Your Gateway to Europe",
-        subtitle: "Discover the power of innovation and excellence",
-        description:
-          "We support talented individuals from the Maghreb (Tunisia, Morocco, Algeria) in finding professional opportunities in the European Union. From job searches to obtaining the EU Blue Card.",
-        button: "See our processes",
-      },
-
-      // New translations for content sections
-      heroTitle: "Welcome to Our Amazing Platform",
-      heroSubtitle: "Discover the power of innovation and excellence",
-      heroDescription:
-        "We provide cutting-edge solutions that transform your business and drive success in the digital age.",
-      learnMore: "Learn More",
-      ourServices: "Our Services",
-      servicesDescription:
-        "We offer comprehensive solutions tailored to your needs",
+      
+      learnMore: "know moreeeee",
+      ourServices: "Our services",
+      
       aboutUs: "About Us",
       aboutDescription: "Your partner for a successful European career",
       getStarted: "Get Started",
@@ -105,26 +128,7 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({
       Needhelp: "Need help? Chat with us!",
     },
     fr: {
-      common: {
-        home: "Accueil",
-        about: "À propos",
-        services: "Services",
-        contact: "Contact",
-        language: "Langue",
-        apply: "Postulez maintenant",
-      },
-      hero: {
-        title: "Votre Passerelle vers l'Europe",
-        subtitle: "Discover the power of innovation and excellence",
-        description:
-          "Nous accompagnons les talents du Maghreb (Tunisie, Maroc, Algérie) dans leur recherche d'opportunités professionnelles au sein de l'Union européenne. De la recherche d'emploi à l'obtention de la carte bleue européenne.",
-        button: "Découvrez nos processus",
-      },
-
-      heroTitle: "Bienvenue sur Notre Plateforme Extraordinaire",
-      heroSubtitle: "Découvrez le pouvoir de l'innovation et de l'excellence",
-      heroDescription:
-        "Nous fournissons des solutions de pointe qui transforment votre entreprise et stimulent le succès à l'ère numérique.",
+      
       learnMore: "En savoir plus",
       ourServices: "Nos Services",
       WhyChooseUs: "Pourquoi nous choisir ?",
@@ -245,7 +249,7 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({
 
     for (const k of keys) {
       if (typeof result !== "object" || result === null || !(k in result)) {
-        return key; // fallback to the key if path is invalid
+        return key;
       }
       result = result[k];
     }
@@ -259,3 +263,4 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({
     </LanguageContext.Provider>
   );
 };
+*/

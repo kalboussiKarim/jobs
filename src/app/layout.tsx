@@ -2,12 +2,12 @@
 
 import React from "react";
 import { Inter } from "next/font/google";
-import "../styles/globals.css";
-import { LanguageProvider } from "../lib/LanguageContext";
-import Navbar from "../components/common/Navbar";
-import Footer from "../components/common/Footer";
-import { ThemeProvider } from "../lib/ThemeContext";
-import WhatsAppBubble from "../components/common/WhatsAppBubble";
+import "./styles/globals.css";
+import { LanguageProvider } from "./lib/LanguageContext";
+import Navbar from "./components/common/Navbar";
+import Footer from "./components/common/Footer";
+import { ThemeProvider } from "./lib/ThemeContext";
+import WhatsAppBubble from "./components/common/WhatsAppBubble";
 
 const inter = Inter({ subsets: ["latin"] });
 

@@ -1,3 +1,4 @@
+import { useLanguage } from "@/app/lib/LanguageContext";
 import React, { useState, useEffect, useRef } from "react";
 
 interface AnimatedCounterProps {
@@ -79,31 +80,33 @@ interface Stat {
 }
 
 const StatsSection: React.FC = () => {
+  const { t } = useLanguage();
+
   const stats: Stat[] = [
     {
       number: 500,
       suffix: "+",
-      label: "Professionnels accompagnés",
+      label: t("stats.ProfessionalsSupported"),
     },
     {
       number: 85,
       suffix: "%",
-      label: "Taux de réussite Carte Bleue",
+      label: t("stats.BlueCardSuccessRate"),
     },
     {
       number: 15,
       suffix: "",
-      label: "Pays européens partenaires",
+      label: t("stats.EuropeanPartnerCountries"),
     },
     {
       number: 95,
       suffix: "%",
-      label: "Satisfaction client",
+      label: t("stats.CustomerSatisfaction"),
     },
   ];
 
   return (
-    <section className="bg-gradient-to-r from-blue-600 to-purple-700 dark:from-blue-800 dark:to-purple-900 py-16 md:py-20 relative overflow-hidden mb-0">
+    <section className="bg-gradient-to-r from-blue-600 to-blue-300 dark:from-blue-700 dark:to-blue-500 py-16 md:py-20 relative overflow-hidden mb-0">
       {/* Animated background elements */}
       <div className="absolute inset-0 opacity-10">
         <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-white rounded-full blur-3xl animate-pulse"></div>
@@ -115,11 +118,10 @@ const StatsSection: React.FC = () => {
         {/* Section Header */}
         <div className="text-center mb-12 md:mb-16">
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
-            Nos Résultats Parlent
+            {t("stats.title")}
           </h2>
           <p className="text-lg md:text-xl text-white/90 max-w-3xl mx-auto">
-            Des chiffres qui témoignent de notre expertise et de notre
-            engagement envers votre réussite
+            {t("stats.description")}
           </p>
         </div>
 

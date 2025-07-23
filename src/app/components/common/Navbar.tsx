@@ -31,15 +31,20 @@ const Navbar: React.FC = () => {
     { code: "de", name: "Deutsch", flag: "🇩🇪" },
   ];
 
-  const menuItems: MenuItem[] = [
+  const menuItems11: MenuItem[] = [
     { key: "common.home", href: "/#home" },
-    { key: "common.about", href: "/#about" },
     { key: "common.services", href: "/#services" },
-    { key: "common.apply", href: "/apply" },
+    { key: "common.process", href: "/#process" },
+    { key: "common.about", href: "/#about" },
+    { key: "common.apply", href: "/#apply" },
   ];
 
+  const menuItems22: MenuItem[] = [{ key: "common.home", href: "/" }];
+
+  const menuItems = pathname === "/apply" ? menuItems22 : menuItems11;
+
   return (
-    <nav className="bg-white dark:bg-gray-900 shadow-lg sticky top-0 z-50  transition-colors duration-300">
+    <nav className="bg-white dark:bg-gray-950 shadow-lg sticky top-0 z-50  transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-18">
           {/* Logo */}

@@ -1,0 +1,80 @@
+{
+  "common": {
+    "home": "Startseite",
+    "about": "Über uns",
+    "services": "Dienstleistungen",
+    "contact": "Kontakt",
+    "language": "Sprache",
+    "apply": "Jetzt",
+    "Needhelp": "Brauchen Sie Hilfe? Chatten Sie mit uns!",
+    "process": "Verfahren",
+
+    "footer": {
+      "footerDescription": "Wir bieten innovative Lösungen, die Ihr Unternehmen transformieren und den Erfolg im digitalen Zeitalter vorantreiben.",
+      "followUs": "Folgen Sie uns",
+      "quickLinks": "Schnellzugriffe",
+      "contactInfo": "Kontaktinformationen",
+      "services": "Dienstleistungen",
+      "allRightsReserved": "Alle Rechte vorbehalten."
+    }
+  },
+
+  "hero": {
+    "title": "Ihr Tor nach Europa",
+    "description": "Wir unterstützen talentierte Menschen aus dem Maghreb (Tunesien, Marokko, Algerien) bei der Suche nach beruflichen Möglichkeiten in der Europäischen Union. Von der Jobsuche bis zum Erhalt der Blauen Karte EU.",
+    "button": "Sehen Sie sich unseren Prozess an"
+  },
+
+  "services": {
+    "title": "Unsere Dienstleistungen",
+    "description": "Wir bieten eine Reihe von Dienstleistungen an, um Ihnen zu helfen, Ihren Karriereweg in Europa zu navigieren, einschließlich Jobvermittlung, Visumsunterstützung und berufliche Entwicklung."
+  },
+
+  "stats": {
+    "title": "Unsere Ergebnisse sprechen",
+    "description": "Zahlen, die von unserer Expertise und unserem Engagement für Ihren Erfolg zeugen.",
+    "ProfessionalsSupported": "Unterstützte Fachkräfte",
+    "BlueCardSuccessRate": "Erfolgsquote der Blauen Karte",
+    "EuropeanPartnerCountries": "Europäische Partnerländer",
+    "CustomerSatisfaction": "Kundenzufriedenheitsrate"
+  },
+
+  "process": {
+    "title": "Unser Prozess",
+    "card1": {
+      "title": "Profilbewertung",
+      "description": "Umfassende Analyse Ihres Profils, Ihrer Fähigkeiten und beruflichen Ziele zur Identifizierung der besten Chancen."
+    },
+    "card2": {
+      "title": "Stellensuche",
+      "description": "Identifizierung von Engpassberufen, die zu Ihrem Profil passen, in unserem Netzwerk von Partnerunternehmen."
+    },
+    "card3": {
+      "title": "Vorbereitung & Bewerbung",
+      "description": "Optimierung Ihres Lebenslaufs, Vorbereitung auf Vorstellungsgespräche und gezielte Bewerbungseinreichung."
+    },
+    "card4": {
+      "title": "Verhandlung & Vertrag",
+      "description": "Unterstützung bei Gehaltsverhandlungen und Prüfung des Arbeitsvertrags gemäß den EU-Anforderungen."
+    },
+    "card5": {
+      "title": "Blue Card Verfahren",
+      "description": "Komplette Erstellung und Nachverfolgung Ihres Antrags auf die EU Blue Card durch unsere Rechtsexperten."
+    },
+    "card6": {
+      "title": "Ankunft & Betreuung",
+      "description": "Unterstützung bei Ihrer Ankunft in Europa sowie Begleitung Ihrer beruflichen und persönlichen Integration."
+    }
+  },
+  "ApplySection": {
+    "title": "Jetzt bewerben!",
+    "subtitle": "Starten Sie Ihre Reise mit uns.",
+    "description": "Senden Sie uns noch heute Ihre Angaben und lassen Sie sich von uns auf dem nächsten Schritt begleiten. Wir verbinden Sie mit den passenden Chancen.",
+    "button": "Bewerben"
+  },
+
+  "AboutSection": {
+    "title": "Über uns",
+    "description": "Wir sind darauf spezialisiert, qualifizierte Fachkräfte von außerhalb der EU, insbesondere aus Tunesien, Marokko und Algerien, mit Jobmöglichkeiten in ganz Europa zu verbinden. Unsere Mission ist es, den internationalen Einstellungsprozess zu vereinfachen, indem wir persönliche Unterstützung, juristische Expertise und Zugang zu einem breiten Netzwerk von Partnerunternehmen bieten, die nach qualifizierten Talenten suchen."
+  }
+}

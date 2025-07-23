@@ -1,0 +1,81 @@
+{
+  "common": {
+    "home": "Accueil",
+    "about": "À propos",
+    "services": "Services",
+    "contact": "Contact",
+    "language": "Langue",
+    "apply": "Postulez",
+    "Needhelp": "Besoin d'aide? Discutez avec nous !",
+    "process": "Processus",
+
+    "footer": {
+      "footerDescription": "Nous fournissons des solutions de pointe qui transforment votre entreprise et favorisent le succès à l’ère numérique.",
+      "followUs": "Suivez-nous",
+      "quickLinks": "Liens rapides",
+      "contactInfo": "Informations de contact",
+      "services": "Services",
+      "allRightsReserved": "Tous droits réservés."
+    }
+  },
+
+  "hero": {
+    "title": "Votre Passerelle vers l'Europe",
+    "subtitle": "Discover the power of innovation and excellence",
+    "description": "Nous accompagnons les talents du Maghreb (Tunisie, Maroc, Algérie) dans leur recherche d'opportunités professionnelles au sein de l'Union européenne. De la recherche d'emploi à l'obtention de la carte bleue européenne.",
+    "button": "Découvrez notre processus"
+  },
+
+  "services": {
+    "title": "Nos Services",
+    "description": "Nous proposons une gamme de services pour vous aider à naviguer dans votre parcours professionnel en Europe, y compris le placement d'emploi, l'assistance aux visas et le développement professionnel."
+  },
+
+  "stats": {
+    "title": "Nos Résultats Parlent",
+    "description": "Des chiffres qui témoignent de notre expertise et de notre engagement envers votre réussite.",
+    "ProfessionalsSupported": "Professionnels accompagnés",
+    "BlueCardSuccessRate": "Taux de réussite de la carte bleue",
+    "EuropeanPartnerCountries": "Pays partenaires européens",
+    "CustomerSatisfaction": "Taux de satisfaction client"
+  },
+
+  "process": {
+    "title": "Notre Processus",
+    "card1": {
+      "title": "Évaluation de Profil",
+      "description": "Analyse complète de votre profil, compétences et objectifs professionnels pour identifier les meilleures opportunités."
+    },
+    "card2": {
+      "title": "Recherche d'Opportunités",
+      "description": "Identification des postes en tension correspondant à votre profil dans notre réseau d'entreprises partenaires."
+    },
+    "card3": {
+      "title": "Préparation & Candidature",
+      "description": "Optimisation de votre CV, préparation aux entretiens et soumission de candidatures ciblées."
+    },
+    "card4": {
+      "title": "Négociation & Contrat",
+      "description": "Accompagnement dans les négociations salariales et validation du contrat de travail conforme aux exigences EU."
+    },
+    "card5": {
+      "title": "Démarches Carte Bleue",
+      "description": "Constitution et suivi complet du dossier de demande de Carte Bleue Européenne avec nos experts juridiques."
+    },
+    "card6": {
+      "title": "Installation & Suivi",
+      "description": "Accompagnement pour votre installation en Europe et suivi de votre intégration professionnelle et personnelle."
+    }
+  },
+  "ApplySection": {
+    "title": "Postulez maintenant !",
+    "subtitle": "Lancez votre aventure avec nous.",
+    "description": "Soumettez vos informations dès aujourd’hui et laissez-nous vous aider à franchir la prochaine étape. Nous sommes là pour vous connecter aux bonnes opportunités.",
+    "button": "Postuler"
+  },
+
+  "AboutSection": {
+    "title": "À propos de nous",
+    "description": "Nous sommes spécialisés dans la mise en relation de professionnels qualifiés originaires de l'extérieur de l'UE, en particulier de Tunisie, du Maroc et d'Algérie, avec des opportunités d'emploi à travers l'Europe. Notre mission est de simplifier le processus de recrutement international en offrant un accompagnement personnalisé, une expertise juridique et un accès à un large réseau d'entreprises partenaires à la recherche de talents."
+  }
+}

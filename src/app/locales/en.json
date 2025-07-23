@@ -1,0 +1,82 @@
+{
+  "common": {
+    "home": "Home",
+    "about": "About",
+    "services": "Services",
+    "contact": "Contact",
+    "language": "Language",
+    "apply": "Apply",
+    "Needhelp": "Need help? Chat with us!",
+    "process": "Process",
+
+    "footer": {
+      "footerDescription": "We provide cutting-edge solutions that transform your business and drive success in the digital age.",
+      "followUs": "Follow Us",
+      "quickLinks": "Quick Links",
+      "contactInfo": "Contact Info",
+      "services": "Services",
+      "allRightsReserved": "All rights reserved."
+    }
+  },
+
+  "hero": {
+    "title": "Your Gateway to Europe",
+    "subtitle": "Discover the power of innovation and excellence",
+    "description": "We support talented individuals from the Maghreb (Tunisia, Morocco, Algeria) in finding professional opportunities in the European Union. From job searches to obtaining the EU Blue Card.",
+    "button": "See our process"
+  },
+
+  "services": {
+    "title": "Our Services",
+    "description": "We offer a range of services to help you navigate your career journey in Europe, including job placement, visa assistance, and professional development."
+  },
+
+  "stats": {
+    "title": "Our Results Speak",
+    "description": "We have successfully assisted numerous individuals in their career transitions, helping them secure jobs and navigate the complexities of moving to Europe.",
+    "ProfessionalsSupported": "Professionals Supported",
+    "BlueCardSuccessRate": "Blue Card Success Rate",
+    "EuropeanPartnerCountries": "European Partner Countries",
+    "CustomerSatisfaction": "Customer Satisfaction Rate"
+  },
+
+  "process": {
+    "title": "Our Process",
+    "card1": {
+      "title": "Profile Assessment",
+      "description": "Comprehensive analysis of your profile, skills, and career goals to identify the best opportunities."
+    },
+    "card2": {
+      "title": "Opportunity Search",
+      "description": "Identification of high-demand positions matching your profile within our partner company network."
+    },
+    "card3": {
+      "title": "Preparation & Application",
+      "description": "CV optimization, interview preparation, and submission of targeted applications."
+    },
+    "card4": {
+      "title": "Negotiation & Contract",
+      "description": "Support in salary negotiations and validation of the employment contract in compliance with EU requirements."
+    },
+    "card5": {
+      "title": "Blue Card Procedures",
+      "description": "Complete preparation and tracking of your EU Blue Card application file with our legal experts."
+    },
+    "card6": {
+      "title": "Relocation & Support",
+      "description": "Support for your relocation to Europe and follow-up on your professional and personal integration."
+    }
+  },
+
+  "ApplySection": {
+    "title": "Apply Now !",
+    "subtitle": "Kickstart your journey with us.",
+    "description": "Submit your details today and let us help you take the next step, we’re here to connect you with the right opportunities.",
+    "button": "Apply"
+  },
+
+  "AboutSection": {
+    "title": "About us",
+    "description": "We specialize in connecting skilled professionals from outside the EU, particularly from Tunisia, Morocco, and Algeria, with job opportunities across Europe. Our mission is to simplify the international hiring process by offering personalized support, legal expertise, and access to a wide network of partner companies seeking qualified talent."
+  }
+}

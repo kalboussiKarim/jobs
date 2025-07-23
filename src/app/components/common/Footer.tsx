@@ -77,14 +77,14 @@ const Footer: React.FC = () => {
                 Horizon Talents
               </h2>
               <p className="text-gray-300 dark:text-gray-400 text-sm leading-relaxed">
-                {t("footerDescription")}
+                {t("common.footer.footerDescription")}
               </p>
             </div>
 
             {/* Social Media Links */}
             <div>
               <h3 className="text-lg font-semibold mb-4 text-white">
-                {t("followUs")}
+                {t("common.footer.followUs")}
               </h3>
               <div className="flex space-x-4">
                 {socialLinks.map((social, index) => (
@@ -104,7 +104,7 @@ const Footer: React.FC = () => {
           {/* Quick Links */}
           <div>
             <h3 className="text-lg font-semibold mb-6 text-white">
-              {t("quickLinks")}
+              {t("common.footer.quickLinks")}
             </h3>
             <ul className="space-y-3">
               {quickLinks.map((link) => (
@@ -113,7 +113,7 @@ const Footer: React.FC = () => {
                     href={link.href}
                     className="text-gray-300 dark:text-gray-400 hover:text-white dark:hover:text-gray-200 transition-colors text-sm"
                   >
-                    {t(link.key)}
+                    {t("common.footer" + link.key)}
                   </a>
                 </li>
               ))}
@@ -123,7 +123,7 @@ const Footer: React.FC = () => {
           {/* Services */}
           <div>
             <h3 className="text-lg font-semibold mb-6 text-white">
-              {t("services")}
+              {t("common.footer.services")}
             </h3>
             <ul className="space-y-3">
               {serviceLinks.map((service) => (
@@ -132,7 +132,7 @@ const Footer: React.FC = () => {
                     href={service.href}
                     className="text-gray-300 dark:text-gray-400 hover:text-white dark:hover:text-gray-200 transition-colors text-sm"
                   >
-                    {t(service.key)}
+                    {t("common.footer" + service.key)}
                   </a>
                 </li>
               ))}
@@ -142,33 +142,33 @@ const Footer: React.FC = () => {
           {/* Contact Info */}
           <div>
             <h3 className="text-lg font-semibold mb-6 text-white">
-              {t("contactInfo")}
+              {t("common.footer.contactInfo")}
             </h3>
             <div className="space-y-4">
               <div className="flex items-start space-x-3">
                 <MapPin className="h-5 w-5 text-gray-400 dark:text-gray-500 mt-0.5 flex-shrink-0" />
                 <p className="text-gray-300 dark:text-gray-400 text-sm">
-                  {t("address")}
+                  {t("common.footer.address")}
                 </p>
               </div>
 
               <div className="flex items-center space-x-3">
                 <Phone className="h-5 w-5 text-gray-400 dark:text-gray-500 flex-shrink-0" />
                 <a
-                  href={`tel:${t("phone")}`}
+                  href={`tel:${+351912909896}`}
                   className="text-gray-300 dark:text-gray-400 hover:text-white dark:hover:text-gray-200 transition-colors text-sm"
                 >
-                  {t("phone")}
+                  +351 912 909 896
                 </a>
               </div>
 
               <div className="flex items-center space-x-3">
                 <Mail className="h-5 w-5 text-gray-400 dark:text-gray-500 flex-shrink-0" />
                 <a
-                  href={`mailto:${t("email")}`}
+                  href={`mailto:${t("footer.email")}`}
                   className="text-gray-300 dark:text-gray-400 hover:text-white dark:hover:text-gray-200 transition-colors text-sm"
                 >
-                  {t("email")}
+                  {t("common.footer.email")}
                 </a>
               </div>
             </div>
@@ -182,7 +182,8 @@ const Footer: React.FC = () => {
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             {/* Copyright */}
             <div className="text-gray-400 dark:text-gray-500 text-sm">
-              © {currentYear} Horizon Talents. {t("allRightsReserved")}
+              © {currentYear} Horizon Talents.{" "}
+              {t("common.footer.allRightsReserved")}
             </div>
 
             {/* Legal Links */}
@@ -191,19 +192,19 @@ const Footer: React.FC = () => {
                 href="#"
                 className="text-gray-400 dark:text-gray-500 hover:text-white dark:hover:text-gray-200 transition-colors text-sm"
               >
-                {t("privacyPolicy")}
+                {t("common.footer.privacyPolicy")}
               </a>
               <a
                 href="#"
                 className="text-gray-400 dark:text-gray-500 hover:text-white dark:hover:text-gray-200 transition-colors text-sm"
               >
-                {t("termsOfService")}
+                {t("common.footer.termsOfService")}
               </a>
               <a
                 href="#"
                 className="text-gray-400 dark:text-gray-500 hover:text-white dark:hover:text-gray-200 transition-colors text-sm"
               >
-                {t("cookiePolicy")}
+                {t("common.footer.cookiePolicy")}
               </a>
             </div>
           </div>
