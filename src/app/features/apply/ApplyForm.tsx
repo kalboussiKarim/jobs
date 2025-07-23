@@ -4,6 +4,8 @@ import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
 import { E164Number } from "libphonenumber-js";
 import en from "react-phone-number-input/locale/en.json";
+import { useCallback } from "react";
+import { useDropzone } from "react-dropzone";
 
 const inputClass =
   "mt-1 block w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white bg-white shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all duration-150";
@@ -14,12 +16,34 @@ const labelClass = "block text-sm font-medium text-gray-700 dark:text-gray-300";
 
 const ApplyForm: React.FC = () => {
   const [value, setValue] = useState<E164Number | undefined>(undefined);
+  const [uploadedFile, setUploadedFile] = useState<File | null>(null);
+
+  const onDrop = useCallback((acceptedFiles: File[], fileRejections: any) => {
+    if (fileRejections.length > 0) {
+      alert("File must be .pdf, .doc, or .docx and under 2MB.");
+      return;
+    }
+    if (acceptedFiles.length > 0) {
+      setUploadedFile(acceptedFiles[0]);
+    }
+  }, []);
+
+  const { getRootProps, getInputProps, isDragActive, acceptedFiles } =
+    useDropzone({
+      onDrop,
+      accept: {
+        "application/pdf": [".pdf"],
+        "application/msword": [".doc"],
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+          [".docx"],
+      },
+      maxFiles: 1,
+      maxSize: 2 * 1024 * 1024, // 2MB
+    });
   return (
     <form className="space-y-6">
       {/* Full Name */}
-      <span className="text-red-500 text-sm">
-        (*)means this field is required
-      </span>
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
           <label htmlFor="firstName" className={labelClass}>
@@ -36,7 +60,7 @@ const ApplyForm: React.FC = () => {
         </div>
         <div>
           <label htmlFor="lastName" className={labelClass}>
-            Family Name
+            Last Name
             <span className="text-red-500">*</span>
           </label>
           <input
@@ -239,22 +263,40 @@ const ApplyForm: React.FC = () => {
       </div>
 
       {/* Resume Upload */}
+      {/* Resume Upload */}
       <div>
-        <label htmlFor="resume" className={labelClass}>
-          Upload Resume (PDF, 2MB max)
-        </label>
-        <input
-          type="file"
-          id="resume"
-          accept=".pdf,.doc,.docx"
-          className="mt-2 block w-full text-sm text-gray-600 dark:text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700"
-        />
+        <label className={labelClass}>Upload Resume (PDF/DOC, max 2MB)</label>
+        <div
+          {...getRootProps()}
+          className="mt-2 flex items-center justify-center px-4 py-6 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:border-blue-400 transition"
+        >
+          <input {...getInputProps()} />
+          {isDragActive ? (
+            <p className="text-sm">Drop the file here ...</p>
+          ) : uploadedFile ? (
+            <p className="text-sm font-medium text-blue-600">
+              {uploadedFile.name}
+            </p>
+          ) : (
+            <p className="text-sm">
+              Drag and drop your resume here, or click to select file
+            </p>
+          )}
+        </div>
+      </div>
+      <div className="mt-5 mb-2">
+        <span className=" text-gray-500 dark:text-gray-200 text-sm">
+          Fields marked with (<span className="text-red-500 text-sm">*</span>
+          <span className="text-gray-500 dark:text-gray-200 text-sm">
+            ) are required.
+          </span>
+        </span>
       </div>
 
       {/* Submit */}
       <button
         type="submit"
-        className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+        className=" w-full bg-gradient-to-r from-blue-600 via-blue-500 to-blue-400 hover:bg-gradient-to-r hover:from-blue-700 hover:via-blue-600 hover:to-blue-500 text-white py-3 rounded-lg font-semibold transform hover:scale-101 transition-all duration-1000"
       >
         Submit Application
       </button>

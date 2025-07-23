@@ -33,9 +33,9 @@ const Navbar: React.FC = () => {
 
   const menuItems11: MenuItem[] = [
     { key: "common.home", href: "/#home" },
+    { key: "common.about", href: "/#about" },
     { key: "common.services", href: "/#services" },
     { key: "common.process", href: "/#process" },
-    { key: "common.about", href: "/#about" },
     { key: "common.apply", href: "/#apply" },
   ];
 
