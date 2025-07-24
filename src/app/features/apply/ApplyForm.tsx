@@ -18,16 +18,67 @@ const ApplyForm: React.FC = () => {
   const [value, setValue] = useState<E164Number | undefined>(undefined);
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
 
+  // Email state and validation
+  const [email, setEmail] = useState("");
+  const [emailError, setEmailError] = useState("");
+
+  // Birthdate state
+  const [dob, setDob] = useState("");
+  const [dobError, setDobError] = useState("");
+
+  // First, Last Name state
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [nameError, setNameError] = useState("");
+
+  // Phone number state
+  const [phoneError, setPhoneError] = useState("");
+
+  // File upload state
+  const [fileError, setFileError] = useState("");
+
+  // Phone validation function
+  const validatePhoneNumber = (phone?: E164Number) => {
+    if (!phone) {
+      setPhoneError("Phone number is required.");
+    } else if (phone.replace(/\D/g, "").length > 15) {
+      setPhoneError("Phone number cannot exceed 15 digits.");
+    } else {
+      setPhoneError("");
+    }
+  };
+
+  // Email validation function
+  const validateEmail = (value: string): boolean => {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(value);
+  };
+
+  // File drop handler
   const onDrop = useCallback((acceptedFiles: File[], fileRejections: any) => {
     if (fileRejections.length > 0) {
-      alert("File must be .pdf, .doc, or .docx and under 2MB.");
+      const error = fileRejections[0].errors[0];
+
+      if (error.code === "file-too-large") {
+        setFileError("File is too large. Maximum size is 2MB.");
+      } else if (error.code === "file-invalid-type") {
+        setFileError(
+          "Invalid file type. Only PDF, DOC, and DOCX are accepted."
+        );
+      } else {
+        setFileError("File upload error.");
+      }
+      setUploadedFile(null);
       return;
     }
+
     if (acceptedFiles.length > 0) {
       setUploadedFile(acceptedFiles[0]);
+      setFileError(""); // clear error if valid
     }
   }, []);
 
+  // Dropzone setup
   const { getRootProps, getInputProps, isDragActive, acceptedFiles } =
     useDropzone({
       onDrop,
@@ -40,71 +91,156 @@ const ApplyForm: React.FC = () => {
       maxFiles: 1,
       maxSize: 2 * 1024 * 1024, // 2MB
     });
+
+  // Date of Birth validation function
+  const validateDOB = (value: string): string => {
+    const enteredDate = new Date(value);
+    const today = new Date();
+    const minAge = 17;
+    const maxAge = 100;
+
+    const age = today.getFullYear() - enteredDate.getFullYear();
+    const m = today.getMonth() - enteredDate.getMonth();
+    const d = today.getDate() - enteredDate.getDate();
+
+    const validDate = !isNaN(enteredDate.getTime());
+
+    if (!validDate) {
+      return "Invalid date format.";
+    }
+
+    if (enteredDate > today) {
+      return "Date of birth cannot be in the future.";
+    }
+
+    if (age < minAge || (age === minAge && (m < 0 || (m === 0 && d < 0)))) {
+      return "You must be at least 17 years old.";
+    }
+
+    if (age > maxAge) {
+      return "Please enter a valid age (less than 100 years).";
+    }
+
+    return ""; // No error
+  };
+
+  // Validate first and last names
+  const validateNames = (first: string, last: string) => {
+    const nameRegex = /^[a-zA-Z\s'-]+$/;
+
+    // Only validate if both names are filled
+    if (!first || !last) {
+      setNameError("");
+      return;
+    }
+
+    if (
+      !nameRegex.test(first) ||
+      !nameRegex.test(last) ||
+      first.toLowerCase() === last.toLowerCase()
+    ) {
+      setNameError(
+        "First and last names must be different and contain only letters."
+      );
+    } else {
+      setNameError("");
+    }
+  };
+
   return (
     <form className="space-y-6">
       {/* Full Name */}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-1">
         <div>
           <label htmlFor="firstName" className={labelClass}>
-            First Name
-            <span className="text-red-500">*</span>
+            First Name <span className="text-red-500">*</span>
           </label>
-
           <input
             type="text"
             id="firstName"
             placeholder="First Name"
             className={inputClass}
+            value={firstName}
+            required
+            onChange={(e) => setFirstName(e.target.value)}
+            onBlur={() => validateNames(firstName, lastName)}
           />
         </div>
+
         <div>
           <label htmlFor="lastName" className={labelClass}>
-            Last Name
-            <span className="text-red-500">*</span>
+            Last Name <span className="text-red-500">*</span>
           </label>
           <input
             type="text"
             id="lastName"
             placeholder="Last Name"
             className={inputClass}
+            value={lastName}
+            required
+            onChange={(e) => setLastName(e.target.value)}
+            onBlur={() => validateNames(firstName, lastName)}
           />
         </div>
       </div>
-
+      <div>
+        {nameError && (
+          <div className="col-span-2">
+            <p className="text-red-500 text-sm mt-0">{nameError}</p>
+          </div>
+        )}
+      </div>
+      {/* Email Address */}
+      <div>
+        <label htmlFor="email" className={labelClass}>
+          Email Address <span className="text-red-500">*</span>
+        </label>
+        <input
+          type="email"
+          id="email"
+          value={email}
+          placeholder="example@email.com"
+          onChange={(e) => {
+            setEmail(e.target.value);
+            if (emailError) setEmailError("");
+          }}
+          onBlur={() => {
+            if (!validateEmail(email)) {
+              setEmailError("Please enter a valid email address.");
+            }
+          }}
+          className={`${inputClass} ${emailError ? "border-red-500" : ""}`}
+          required
+        />
+        {emailError && (
+          <p className="text-sm text-red-500 mt-1">{emailError}</p>
+        )}
+      </div>
       {/* Date of Birth */}
       <div>
         <label htmlFor="dob" className={labelClass}>
-          Date of Birth
-          <span className="text-red-500">*</span>
+          Date of Birth <span className="text-red-500">*</span>
         </label>
-        <input type="date" id="dob" className={inputClass} />
-      </div>
-
-      {/* Phone Number */}
-      <div>
-        <label htmlFor="phone" className={labelClass}>
-          Phone Number <span className="text-red-500">*</span>
-        </label>
-
-        <PhoneInput
-          international
-          defaultCountry="TN"
-          value={value}
-          onChange={setValue}
-          className={inputClass2}
-          placeholder="Enter phone number"
-          id="phone"
-          countries={["TN", "DZ", "MA", "LY", "EG"]}
-          labels={en}
+        <input
+          type="date"
+          id="dob"
+          className={inputClass}
+          value={dob}
+          required
+          onChange={(e) => setDob(e.target.value)}
+          onBlur={() => {
+            const error = validateDOB(dob);
+            setDobError(error);
+          }}
         />
+        {dobError && <p className="text-red-500 text-sm mt-1">{dobError}</p>}
       </div>
 
       {/* Years of Experience */}
       <div>
         <label htmlFor="experience" className={labelClass}>
-          Years of Experience
-          <span className="text-red-500">*</span>
+          Years of Experience <span className="text-red-500">*</span>
         </label>
         <select id="experience" className={inputClass}>
           {[...Array(11).keys()].map((year) => (
@@ -119,8 +255,7 @@ const ApplyForm: React.FC = () => {
       {/* Diploma */}
       <div>
         <label htmlFor="diploma" className={labelClass}>
-          Highest Diploma Obtained
-          <span className="text-red-500">*</span>
+          Highest Diploma Obtained <span className="text-red-500">*</span>
         </label>
         <select id="diploma" className={inputClass}>
           <option value="CAP/BEP">CAP/BEP</option>
@@ -136,8 +271,7 @@ const ApplyForm: React.FC = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
           <label htmlFor="french" className={labelClass}>
-            French Level
-            <span className="text-red-500">*</span>
+            French Level <span className="text-red-500">*</span>
           </label>
           <select id="french" defaultValue="A1" className={inputClass}>
             <option value="A1">A1</option>
@@ -150,8 +284,7 @@ const ApplyForm: React.FC = () => {
         </div>
         <div>
           <label htmlFor="english" className={labelClass}>
-            English Level
-            <span className="text-red-500">*</span>
+            English Level <span className="text-red-500">*</span>
           </label>
           <select id="english" defaultValue="A1" className={inputClass}>
             <option value="A1">A1</option>
@@ -167,8 +300,7 @@ const ApplyForm: React.FC = () => {
       {/* Target Job */}
       <div>
         <label htmlFor="job" className={labelClass}>
-          Target Job
-          <span className="text-red-500">*</span>
+          Target Job <span className="text-red-500">*</span>
         </label>
         <select id="job" className={inputClass}>
           <option value="developer">Software Developer</option>
@@ -185,8 +317,7 @@ const ApplyForm: React.FC = () => {
       {/* Availability */}
       <div className="mb-6">
         <span className="block text-gray-700 dark:text-gray-200 font-medium mb-2">
-          Availability
-          <span className="text-red-500">*</span>
+          Availability <span className="text-red-500">*</span>
         </span>
         <div className="flex flex-col sm:flex-row sm:space-x-4 space-y-2 sm:space-y-0">
           <label className="inline-flex items-center">
@@ -240,6 +371,30 @@ const ApplyForm: React.FC = () => {
         </div>
       </div>
 
+      {/* Phone Number */}
+      <div>
+        <label htmlFor="phone" className={labelClass}>
+          Phone Number
+        </label>
+
+        <PhoneInput
+          international
+          defaultCountry="TN"
+          value={value}
+          onChange={setValue}
+          onBlur={() => validatePhoneNumber(value)}
+          className={inputClass2}
+          placeholder="Enter phone number"
+          id="phone"
+          countries={["TN", "DZ", "MA", "LY", "EG"]}
+          labels={en}
+          required
+        />
+        {phoneError && (
+          <p className="mt-1 text-sm text-red-600">{phoneError}</p>
+        )}
+      </div>
+
       {/* Country */}
       <div>
         <label htmlFor="country" className={labelClass}>
@@ -263,7 +418,6 @@ const ApplyForm: React.FC = () => {
       </div>
 
       {/* Resume Upload */}
-      {/* Resume Upload */}
       <div>
         <label className={labelClass}>Upload Resume (PDF/DOC, max 2MB)</label>
         <div
@@ -283,6 +437,7 @@ const ApplyForm: React.FC = () => {
             </p>
           )}
         </div>
+        {fileError && <p className="mt-2 text-sm text-red-600">{fileError}</p>}
       </div>
       <div className="mt-5 mb-2">
         <span className=" text-gray-500 dark:text-gray-200 text-sm">
