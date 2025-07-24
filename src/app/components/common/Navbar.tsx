@@ -31,7 +31,7 @@ const Navbar: React.FC = () => {
     { code: "de", name: "Deutsch", flag: "🇩🇪" },
   ];
 
-  const menuItems11: MenuItem[] = [
+  const menuItems1: MenuItem[] = [
     { key: "common.home", href: "/#home" },
     { key: "common.about", href: "/#about" },
     { key: "common.services", href: "/#services" },
@@ -39,9 +39,9 @@ const Navbar: React.FC = () => {
     { key: "common.apply", href: "/#apply" },
   ];
 
-  const menuItems22: MenuItem[] = [{ key: "common.home", href: "/" }];
+  const menuItems2: MenuItem[] = [{ key: "common.home", href: "/" }];
 
-  const menuItems = pathname === "/apply" ? menuItems22 : menuItems11;
+  const menuItems = pathname === "/apply" ? menuItems2 : menuItems1;
 
   return (
     <nav className="bg-white dark:bg-gray-950 shadow-lg sticky top-0 z-50  transition-colors duration-300">
