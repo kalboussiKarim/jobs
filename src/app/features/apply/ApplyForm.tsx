@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
 import { E164Number } from "libphonenumber-js";
@@ -18,6 +18,10 @@ const labelClass = "block text-sm font-medium text-gray-700 dark:text-gray-300";
 
 const ApplyForm: React.FC = () => {
   // Form state
+
+  const [mathQuestion, setMathQuestion] = useState({ question: "", answer: 0 });
+  const [userAnswer, setUserAnswer] = useState("");
+
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -42,6 +46,38 @@ const ApplyForm: React.FC = () => {
     message: string;
   }>({ type: null, message: "" });
 
+  // Generate new math question
+  const generateMathQuestion = () => {
+    const num1 = Math.floor(Math.random() * 10) + 1;
+    const num2 = Math.floor(Math.random() * 10) + 1;
+    const operators = ["+", "-"];
+    const operator = operators[Math.floor(Math.random() * operators.length)];
+
+    let answer;
+    let question;
+
+    if (operator === "+") {
+      answer = num1 + num2;
+      question = `${num1} + ${num2}`;
+    } else {
+      // For subtraction, ensure positive result
+      if (num1 >= num2) {
+        answer = num1 - num2;
+        question = `${num1} - ${num2}`;
+      } else {
+        answer = num2 - num1;
+        question = `${num2} - ${num1}`;
+      }
+    }
+
+    setMathQuestion({ question, answer });
+  };
+
+  // Generate initial math question
+  useEffect(() => {
+    generateMathQuestion();
+  }, []);
+
   // Handle input changes
   const handleInputChange = (field: string, value: any) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -49,6 +85,14 @@ const ApplyForm: React.FC = () => {
     // Clear error when user starts typing
     if (errors[field]) {
       setErrors((prev) => ({ ...prev, [field]: "" }));
+    }
+  };
+
+  // Handle math answer change
+  const handleMathAnswerChange = (value: string) => {
+    setUserAnswer(value);
+    if (errors.mathCaptcha) {
+      setErrors((prev) => ({ ...prev, mathCaptcha: "" }));
     }
   };
 
@@ -114,6 +158,18 @@ const ApplyForm: React.FC = () => {
     setIsSubmitting(true);
     setSubmitStatus({ type: null, message: "" });
 
+    // Validate math CAPTCHA first
+    if (parseInt(userAnswer) !== mathQuestion.answer) {
+      setErrors((prev) => ({
+        ...prev,
+        mathCaptcha: "Incorrect answer. Please try again.",
+      }));
+      generateMathQuestion(); // Generate new question
+      setUserAnswer(""); // Clear user answer
+      setIsSubmitting(false);
+      return;
+    }
+
     // Validate form
     const validation = validateForm({
       ...formData,
@@ -167,6 +223,8 @@ const ApplyForm: React.FC = () => {
         });
         setUploadedFile(null);
         setErrors({});
+        setUserAnswer("");
+        generateMathQuestion();
       } else {
         setSubmitStatus({
           type: "error",
@@ -175,6 +233,9 @@ const ApplyForm: React.FC = () => {
         setTimeout(() => {
           setSubmitStatus({ type: null, message: "" });
         }, 2000);
+        // Generate new math question on error
+        generateMathQuestion();
+        setUserAnswer("");
       }
     } catch (error) {
       setSubmitStatus({
@@ -184,10 +245,16 @@ const ApplyForm: React.FC = () => {
       setTimeout(() => {
         setSubmitStatus({ type: null, message: "" });
       }, 2000);
+      // Generate new math question on error
+      generateMathQuestion();
+      setUserAnswer("");
     } finally {
       setIsSubmitting(false);
     }
   };
+
+  const isMathAnswerCorrect =
+    userAnswer !== "" && parseInt(userAnswer) === mathQuestion.answer;
 
   return (
     <form className="space-y-6" onSubmit={handleSubmit}>
@@ -547,6 +614,43 @@ const ApplyForm: React.FC = () => {
         {errors.file && (
           <p className="mt-2 text-sm text-red-600">{errors.file}</p>
         )}
+      </div>
+
+      {/* Math CAPTCHA */}
+      <div>
+        <label className={labelClass}>
+          Security Check <span className="text-red-500">*</span>
+        </label>
+        <div className="mt-2 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg border">
+          <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">
+            Please solve this simple math problem to verify you're human:
+          </p>
+          <div className="flex items-center space-x-2">
+            <span className="text-lg font-semibold text-gray-800 dark:text-gray-200">
+              {mathQuestion.question} =
+            </span>
+            <input
+              type="number"
+              value={userAnswer}
+              onChange={(e) => handleMathAnswerChange(e.target.value)}
+              className={`w-20 px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none ${
+                errors.mathCaptcha
+                  ? "border-red-500"
+                  : isMathAnswerCorrect
+                  ? "border-green-500 bg-green-50"
+                  : "border-gray-300"
+              }`}
+              placeholder="?"
+              required
+            />
+            {isMathAnswerCorrect && (
+              <span className="text-green-600 text-sm">✓ Correct!</span>
+            )}
+          </div>
+          {errors.mathCaptcha && (
+            <p className="mt-2 text-sm text-red-600">{errors.mathCaptcha}</p>
+          )}
+        </div>
       </div>
 
       {/* Status Message */}
