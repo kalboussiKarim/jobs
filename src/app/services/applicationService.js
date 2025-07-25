@@ -3,6 +3,11 @@ import st from "../backend/storage";
 import { Permission, Role } from "appwrite";
 
 export class ApplicationService {
+  /**
+   * @param {Object} formData - The application form data.
+   * @param {File|null} [resumeFile=null] - Optional resume file.
+   * @returns {Promise<{ success: boolean, data?: any, message?: string, error?: string }>}
+   */
   static async submitApplication(formData, resumeFile = null) {
     try {
       let resumeFileId = null;
