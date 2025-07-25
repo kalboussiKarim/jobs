@@ -259,7 +259,7 @@ const ApplyForm: React.FC = () => {
   return (
     <form className="space-y-6" onSubmit={handleSubmit}>
       {/* Full Name */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-1">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
         <div>
           <label htmlFor="firstName" className={labelClass}>
             First Name <span className="text-red-500">*</span>
