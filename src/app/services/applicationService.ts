@@ -30,7 +30,8 @@ export class ApplicationService {
 
       // Upload resume file if provided
       if (resumeFile) {
-        const uploadResponse = await st.resumes.upload(
+        const resumes = (st as any).resumes;
+        const uploadResponse = await resumes.upload(
           resumeFile,
           [Permission.read(Role.any())], // Read permissions
           [Permission.write(Role.any())] // Write permissions
@@ -57,7 +58,8 @@ export class ApplicationService {
       };
 
       // Create the application document
-      const response = await db.applications.create(applicationData);
+      const applications = (db as any).applications;
+      const response = await applications.create(applicationData);
 
       return {
         success: true,
@@ -67,18 +69,25 @@ export class ApplicationService {
     } catch (error) {
       console.error("Error submitting application:", error);
 
+      let resumeFileId: string | null = null;
       // If resume was uploaded but application creation failed, clean up the file
       if (resumeFileId) {
         try {
-          await st.resumes.delete(resumeFileId);
+          const resumes = (st as any).resumes;
+          await resumes.delete(resumeFileId);
         } catch (cleanupError) {
           console.error("Error cleaning up uploaded file:", cleanupError);
         }
       }
+      let errorMessage = "Failed to submit application";
+
+      if (error instanceof Error) {
+        errorMessage = error.message;
+      }
 
       return {
         success: false,
-        error: error.message || "Failed to submit application",
+        error: errorMessage,
       };
     }
   }
