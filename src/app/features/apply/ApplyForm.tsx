@@ -6,6 +6,8 @@ import { E164Number } from "libphonenumber-js";
 import en from "react-phone-number-input/locale/en.json";
 import { useCallback } from "react";
 import { useDropzone } from "react-dropzone";
+import { ApplicationService } from "../../services/applicationService";
+import { validateForm } from "../../utils/validation";
 
 const inputClass =
   "mt-1 block w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white bg-white shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all duration-150";
@@ -15,43 +17,53 @@ const inputClass2 =
 const labelClass = "block text-sm font-medium text-gray-700 dark:text-gray-300";
 
 const ApplyForm: React.FC = () => {
-  const [value, setValue] = useState<E164Number | undefined>(undefined);
+  // Form state
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    dob: "",
+    experience: "0",
+    diploma: "CAP/BEP",
+    frenchLevel: "A1",
+    englishLevel: "A1",
+    targetJob: "developer",
+    availability: "",
+    phone: undefined as E164Number | undefined,
+    preferredCountry: "France",
+    linkedinURL: "",
+  });
+
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<{
+    type: "success" | "error" | null;
+    message: string;
+  }>({ type: null, message: "" });
 
-  // Email state and validation
-  const [email, setEmail] = useState("");
-  const [emailError, setEmailError] = useState("");
+  // Handle input changes
+  const handleInputChange = (field: string, value: any) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
 
-  // Birthdate state
-  const [dob, setDob] = useState("");
-  const [dobError, setDobError] = useState("");
-
-  // First, Last Name state
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [nameError, setNameError] = useState("");
-
-  // Phone number state
-  const [phoneError, setPhoneError] = useState("");
-
-  // File upload state
-  const [fileError, setFileError] = useState("");
+    // Clear error when user starts typing
+    if (errors[field]) {
+      setErrors((prev) => ({ ...prev, [field]: "" }));
+    }
+  };
 
   // Phone validation function
   const validatePhoneNumber = (phone?: E164Number) => {
     if (!phone) {
-      setPhoneError("Phone number is required.");
+      setErrors((prev) => ({ ...prev, phone: "Phone number is required." }));
     } else if (phone.replace(/\D/g, "").length > 15) {
-      setPhoneError("Phone number cannot exceed 15 digits.");
+      setErrors((prev) => ({
+        ...prev,
+        phone: "Phone number cannot exceed 15 digits.",
+      }));
     } else {
-      setPhoneError("");
+      setErrors((prev) => ({ ...prev, phone: "" }));
     }
-  };
-
-  // Email validation function
-  const validateEmail = (value: string): boolean => {
-    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return regex.test(value);
   };
 
   // File drop handler
@@ -60,13 +72,17 @@ const ApplyForm: React.FC = () => {
       const error = fileRejections[0].errors[0];
 
       if (error.code === "file-too-large") {
-        setFileError("File is too large. Maximum size is 2MB.");
+        setErrors((prev) => ({
+          ...prev,
+          file: "File is too large. Maximum size is 2MB.",
+        }));
       } else if (error.code === "file-invalid-type") {
-        setFileError(
-          "Invalid file type. Only PDF, DOC, and DOCX are accepted."
-        );
+        setErrors((prev) => ({
+          ...prev,
+          file: "Invalid file type. Only PDF, DOC, and DOCX are accepted.",
+        }));
       } else {
-        setFileError("File upload error.");
+        setErrors((prev) => ({ ...prev, file: "File upload error." }));
       }
       setUploadedFile(null);
       return;
@@ -74,83 +90,99 @@ const ApplyForm: React.FC = () => {
 
     if (acceptedFiles.length > 0) {
       setUploadedFile(acceptedFiles[0]);
-      setFileError(""); // clear error if valid
+      setErrors((prev) => ({ ...prev, file: "" }));
     }
   }, []);
 
   // Dropzone setup
-  const { getRootProps, getInputProps, isDragActive, acceptedFiles } =
-    useDropzone({
-      onDrop,
-      accept: {
-        "application/pdf": [".pdf"],
-        "application/msword": [".doc"],
-        "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
-          [".docx"],
-      },
-      maxFiles: 1,
-      maxSize: 2 * 1024 * 1024, // 2MB
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop,
+    accept: {
+      "application/pdf": [".pdf"],
+      "application/msword": [".doc"],
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+        [".docx"],
+    },
+    maxFiles: 1,
+    maxSize: 2 * 1024 * 1024, // 2MB
+  });
+
+  // Handle form submission
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    setIsSubmitting(true);
+    setSubmitStatus({ type: null, message: "" });
+
+    // Validate form
+    const validation = validateForm({
+      ...formData,
+      phone: formData.phone,
     });
 
-  // Date of Birth validation function
-  const validateDOB = (value: string): string => {
-    const enteredDate = new Date(value);
-    const today = new Date();
-    const minAge = 17;
-    const maxAge = 100;
-
-    const age = today.getFullYear() - enteredDate.getFullYear();
-    const m = today.getMonth() - enteredDate.getMonth();
-    const d = today.getDate() - enteredDate.getDate();
-
-    const validDate = !isNaN(enteredDate.getTime());
-
-    if (!validDate) {
-      return "Invalid date format.";
-    }
-
-    if (enteredDate > today) {
-      return "Date of birth cannot be in the future.";
-    }
-
-    if (age < minAge || (age === minAge && (m < 0 || (m === 0 && d < 0)))) {
-      return "You must be at least 17 years old.";
-    }
-
-    if (age > maxAge) {
-      return "Please enter a valid age (less than 100 years).";
-    }
-
-    return ""; // No error
-  };
-
-  // Validate first and last names
-  const validateNames = (first: string, last: string) => {
-    const nameRegex = /^[a-zA-Z\s'-]+$/;
-
-    // Only validate if both names are filled
-    if (!first || !last) {
-      setNameError("");
+    if (!validation.isValid) {
+      setErrors(validation.errors);
+      setIsSubmitting(false);
       return;
     }
 
-    if (
-      !nameRegex.test(first) ||
-      !nameRegex.test(last) ||
-      first.toLowerCase() === last.toLowerCase()
-    ) {
-      setNameError(
-        "First and last names must be different and contain only letters."
+    try {
+      // Submit the application
+      console.log(
+        "Submitting application with data:",
+        formData.preferredCountry
       );
-    } else {
-      setNameError("");
+      const result = await ApplicationService.submitApplication(
+        {
+          ...formData,
+          phone: formData.phone || "",
+        },
+        uploadedFile
+      );
+
+      if (result.success) {
+        setSubmitStatus({
+          type: "success",
+          message: result.message || "Application submitted successfully!",
+        });
+
+        // Reset form
+        setFormData({
+          firstName: "",
+          lastName: "",
+          email: "",
+          dob: "",
+          experience: "0",
+          diploma: "CAP/BEP",
+          frenchLevel: "A1",
+          englishLevel: "A1",
+          targetJob: "developer",
+          availability: "",
+          phone: undefined,
+          preferredCountry: "France",
+          linkedinURL: "",
+        });
+        setUploadedFile(null);
+        setErrors({});
+      } else {
+        setSubmitStatus({
+          type: "error",
+          message: result.error || "Failed to submit application",
+        });
+      }
+    } catch (error) {
+      setSubmitStatus({
+        type: "error",
+        message: "An unexpected error occurred. Please try again.",
+      });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   return (
-    <form className="space-y-6">
+    <form className="space-y-6" onSubmit={handleSubmit}>
       {/* Full Name */}
-
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-1">
         <div>
           <label htmlFor="firstName" className={labelClass}>
@@ -160,12 +192,16 @@ const ApplyForm: React.FC = () => {
             type="text"
             id="firstName"
             placeholder="First Name"
-            className={inputClass}
-            value={firstName}
+            className={`${inputClass} ${
+              errors.firstName ? "border-red-500" : ""
+            }`}
+            value={formData.firstName}
             required
-            onChange={(e) => setFirstName(e.target.value)}
-            onBlur={() => validateNames(firstName, lastName)}
+            onChange={(e) => handleInputChange("firstName", e.target.value)}
           />
+          {errors.firstName && (
+            <p className="text-red-500 text-sm mt-1">{errors.firstName}</p>
+          )}
         </div>
 
         <div>
@@ -176,21 +212,25 @@ const ApplyForm: React.FC = () => {
             type="text"
             id="lastName"
             placeholder="Last Name"
-            className={inputClass}
-            value={lastName}
+            className={`${inputClass} ${
+              errors.lastName ? "border-red-500" : ""
+            }`}
+            value={formData.lastName}
             required
-            onChange={(e) => setLastName(e.target.value)}
-            onBlur={() => validateNames(firstName, lastName)}
+            onChange={(e) => handleInputChange("lastName", e.target.value)}
           />
+          {errors.lastName && (
+            <p className="text-red-500 text-sm mt-1">{errors.lastName}</p>
+          )}
         </div>
       </div>
-      <div>
-        {nameError && (
-          <div className="col-span-2">
-            <p className="text-red-500 text-sm mt-0">{nameError}</p>
-          </div>
-        )}
-      </div>
+
+      {errors.names && (
+        <div>
+          <p className="text-red-500 text-sm mt-0">{errors.names}</p>
+        </div>
+      )}
+
       {/* Email Address */}
       <div>
         <label htmlFor="email" className={labelClass}>
@@ -199,24 +239,17 @@ const ApplyForm: React.FC = () => {
         <input
           type="email"
           id="email"
-          value={email}
+          value={formData.email}
           placeholder="example@email.com"
-          onChange={(e) => {
-            setEmail(e.target.value);
-            if (emailError) setEmailError("");
-          }}
-          onBlur={() => {
-            if (!validateEmail(email)) {
-              setEmailError("Please enter a valid email address.");
-            }
-          }}
-          className={`${inputClass} ${emailError ? "border-red-500" : ""}`}
+          onChange={(e) => handleInputChange("email", e.target.value)}
+          className={`${inputClass} ${errors.email ? "border-red-500" : ""}`}
           required
         />
-        {emailError && (
-          <p className="text-sm text-red-500 mt-1">{emailError}</p>
+        {errors.email && (
+          <p className="text-sm text-red-500 mt-1">{errors.email}</p>
         )}
       </div>
+
       {/* Date of Birth */}
       <div>
         <label htmlFor="dob" className={labelClass}>
@@ -225,16 +258,14 @@ const ApplyForm: React.FC = () => {
         <input
           type="date"
           id="dob"
-          className={inputClass}
-          value={dob}
+          className={`${inputClass} ${errors.dob ? "border-red-500" : ""}`}
+          value={formData.dob}
           required
-          onChange={(e) => setDob(e.target.value)}
-          onBlur={() => {
-            const error = validateDOB(dob);
-            setDobError(error);
-          }}
+          onChange={(e) => handleInputChange("dob", e.target.value)}
         />
-        {dobError && <p className="text-red-500 text-sm mt-1">{dobError}</p>}
+        {errors.dob && (
+          <p className="text-red-500 text-sm mt-1">{errors.dob}</p>
+        )}
       </div>
 
       {/* Years of Experience */}
@@ -242,9 +273,14 @@ const ApplyForm: React.FC = () => {
         <label htmlFor="experience" className={labelClass}>
           Years of Experience <span className="text-red-500">*</span>
         </label>
-        <select id="experience" className={inputClass}>
+        <select
+          id="experience"
+          className={inputClass}
+          value={formData.experience}
+          onChange={(e) => handleInputChange("experience", e.target.value)}
+        >
           {[...Array(11).keys()].map((year) => (
-            <option key={year} value={year}>
+            <option key={year} value={year.toString()}>
               {year}
             </option>
           ))}
@@ -257,7 +293,12 @@ const ApplyForm: React.FC = () => {
         <label htmlFor="diploma" className={labelClass}>
           Highest Diploma Obtained <span className="text-red-500">*</span>
         </label>
-        <select id="diploma" className={inputClass}>
+        <select
+          id="diploma"
+          className={inputClass}
+          value={formData.diploma}
+          onChange={(e) => handleInputChange("diploma", e.target.value)}
+        >
           <option value="CAP/BEP">CAP/BEP</option>
           <option value="Bac">Bac</option>
           <option value="Bac+2">Bac+2 (BTS/DUT)</option>
@@ -273,7 +314,12 @@ const ApplyForm: React.FC = () => {
           <label htmlFor="french" className={labelClass}>
             French Level <span className="text-red-500">*</span>
           </label>
-          <select id="french" defaultValue="A1" className={inputClass}>
+          <select
+            id="french"
+            className={inputClass}
+            value={formData.frenchLevel}
+            onChange={(e) => handleInputChange("frenchLevel", e.target.value)}
+          >
             <option value="A1">A1</option>
             <option value="A2">A2</option>
             <option value="B1">B1</option>
@@ -286,7 +332,12 @@ const ApplyForm: React.FC = () => {
           <label htmlFor="english" className={labelClass}>
             English Level <span className="text-red-500">*</span>
           </label>
-          <select id="english" defaultValue="A1" className={inputClass}>
+          <select
+            id="english"
+            className={inputClass}
+            value={formData.englishLevel}
+            onChange={(e) => handleInputChange("englishLevel", e.target.value)}
+          >
             <option value="A1">A1</option>
             <option value="A2">A2</option>
             <option value="B1">B1</option>
@@ -302,7 +353,12 @@ const ApplyForm: React.FC = () => {
         <label htmlFor="job" className={labelClass}>
           Target Job <span className="text-red-500">*</span>
         </label>
-        <select id="job" className={inputClass}>
+        <select
+          id="job"
+          className={inputClass}
+          value={formData.targetJob}
+          onChange={(e) => handleInputChange("targetJob", e.target.value)}
+        >
           <option value="developer">Software Developer</option>
           <option value="designer">UI/UX Designer</option>
           <option value="project-manager">Project Manager</option>
@@ -326,6 +382,10 @@ const ApplyForm: React.FC = () => {
               name="availability"
               value="0-1 months"
               className="form-radio text-blue-600 focus:ring-blue-500"
+              checked={formData.availability === "0-1 months"}
+              onChange={(e) =>
+                handleInputChange("availability", e.target.value)
+              }
               required
             />
             <span className="ml-2 text-gray-700 dark:text-gray-200">
@@ -339,6 +399,10 @@ const ApplyForm: React.FC = () => {
               name="availability"
               value="1-3 months"
               className="form-radio text-blue-600 focus:ring-blue-500"
+              checked={formData.availability === "1-3 months"}
+              onChange={(e) =>
+                handleInputChange("availability", e.target.value)
+              }
             />
             <span className="ml-2 text-gray-700 dark:text-gray-200">
               1-3 months
@@ -351,6 +415,10 @@ const ApplyForm: React.FC = () => {
               name="availability"
               value="3-6 months"
               className="form-radio text-blue-600 focus:ring-blue-500"
+              checked={formData.availability === "3-6 months"}
+              onChange={(e) =>
+                handleInputChange("availability", e.target.value)
+              }
             />
             <span className="ml-2 text-gray-700 dark:text-gray-200">
               3-6 months
@@ -360,38 +428,46 @@ const ApplyForm: React.FC = () => {
             <input
               type="radio"
               name="availability"
-              value="0-1 months"
+              value="+6 months"
               className="form-radio text-blue-600 focus:ring-blue-500"
-              required
+              checked={formData.availability === "+6 months"}
+              onChange={(e) =>
+                handleInputChange("availability", e.target.value)
+              }
             />
             <span className="ml-2 text-gray-700 dark:text-gray-200">
               +6 months
             </span>
           </label>
         </div>
+        {errors.availability && (
+          <p className="text-red-500 text-sm mt-1">{errors.availability}</p>
+        )}
       </div>
 
       {/* Phone Number */}
       <div>
         <label htmlFor="phone" className={labelClass}>
-          Phone Number
+          Phone Number <span className="text-red-500">*</span>
         </label>
 
         <PhoneInput
           international
           defaultCountry="TN"
-          value={value}
-          onChange={setValue}
-          onBlur={() => validatePhoneNumber(value)}
-          className={inputClass2}
+          value={formData.phone}
+          onChange={(value) => {
+            handleInputChange("phone", value);
+            validatePhoneNumber(value);
+          }}
+          className={`${inputClass2} ${errors.phone ? "border-red-500" : ""}`}
           placeholder="Enter phone number"
           id="phone"
           countries={["TN", "DZ", "MA", "LY", "EG"]}
           labels={en}
           required
         />
-        {phoneError && (
-          <p className="mt-1 text-sm text-red-600">{phoneError}</p>
+        {errors.phone && (
+          <p className="mt-1 text-sm text-red-600">{errors.phone}</p>
         )}
       </div>
 
@@ -400,12 +476,19 @@ const ApplyForm: React.FC = () => {
         <label htmlFor="country" className={labelClass}>
           Preferred Country
         </label>
-        <select id="country" className={inputClass}>
-          <option value="france">France</option>
-          <option value="germany">Germany</option>
-          <option value="netherlands">Netherlands</option>
-          <option value="belgium">Belgium</option>
-          <option value="sweden">Sweden</option>
+        <select
+          id="country"
+          className={inputClass}
+          value={formData.preferredCountry}
+          onChange={(e) =>
+            handleInputChange("preferredCountry", e.target.value)
+          }
+        >
+          <option value="France">France</option>
+          <option value="Germany">Germany</option>
+          <option value="Netherlands">Netherlands</option>
+          <option value="Belgium">Belgium</option>
+          <option value="Sweden">Sweden</option>
         </select>
       </div>
 
@@ -414,7 +497,18 @@ const ApplyForm: React.FC = () => {
         <label htmlFor="linkedin" className={labelClass}>
           LinkedIn Profile or Portfolio URL
         </label>
-        <input type="url" id="linkedin" className={inputClass} />
+        <input
+          type="url"
+          id="linkedin"
+          className={`${inputClass} ${
+            errors.linkedinURL ? "border-red-500" : ""
+          }`}
+          value={formData.linkedinURL}
+          onChange={(e) => handleInputChange("linkedinURL", e.target.value)}
+        />
+        {errors.linkedinURL && (
+          <p className="text-red-500 text-sm mt-1">{errors.linkedinURL}</p>
+        )}
       </div>
 
       {/* Resume Upload */}
@@ -422,7 +516,11 @@ const ApplyForm: React.FC = () => {
         <label className={labelClass}>Upload Resume (PDF/DOC, max 2MB)</label>
         <div
           {...getRootProps()}
-          className="mt-2 flex items-center justify-center px-4 py-6 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:border-blue-400 transition"
+          className={`mt-2 flex items-center justify-center px-4 py-6 border-2 border-dashed ${
+            errors.file
+              ? "border-red-500"
+              : "border-gray-300 dark:border-gray-600"
+          } rounded-lg cursor-pointer bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:border-blue-400 transition`}
         >
           <input {...getInputProps()} />
           {isDragActive ? (
@@ -437,23 +535,35 @@ const ApplyForm: React.FC = () => {
             </p>
           )}
         </div>
-        {fileError && <p className="mt-2 text-sm text-red-600">{fileError}</p>}
+        {errors.file && (
+          <p className="mt-2 text-sm text-red-600">{errors.file}</p>
+        )}
       </div>
-      <div className="mt-5 mb-2">
-        <span className=" text-gray-500 dark:text-gray-200 text-sm">
-          Fields marked with (<span className="text-red-500 text-sm">*</span>
-          <span className="text-gray-500 dark:text-gray-200 text-sm">
-            ) are required.
-          </span>
-        </span>
-      </div>
+
+      {/* Status Message */}
+      {submitStatus.type && (
+        <div
+          className={`p-4 rounded-lg ${
+            submitStatus.type === "success"
+              ? "bg-green-100 border border-green-400 text-green-700"
+              : "bg-red-100 border border-red-400 text-red-700"
+          }`}
+        >
+          {submitStatus.message}
+        </div>
+      )}
 
       {/* Submit */}
       <button
         type="submit"
-        className=" w-full bg-gradient-to-r from-blue-600 via-blue-500 to-blue-400 hover:bg-gradient-to-r hover:from-blue-700 hover:via-blue-600 hover:to-blue-500 text-white py-3 rounded-lg font-semibold transform hover:scale-101 transition-all duration-1000"
+        disabled={isSubmitting}
+        className={`w-full py-3 rounded-lg font-semibold transform transition-all duration-1000 ${
+          isSubmitting
+            ? "bg-gray-400 cursor-not-allowed"
+            : "bg-gradient-to-r from-blue-600 via-blue-500 to-blue-400 hover:bg-gradient-to-r hover:from-blue-700 hover:via-blue-600 hover:to-blue-500 hover:scale-101"
+        } text-white`}
       >
-        Submit Application
+        {isSubmitting ? "Submitting..." : "Submit Application"}
       </button>
     </form>
   );

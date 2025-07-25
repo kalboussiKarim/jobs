@@ -5,7 +5,7 @@ const st = {};
 
 const buckets = [
   {
-    id: import.meta.env.VITE_APPWRITE_BUCKET_RESUMES,
+    id: process.env.NEXT_PUBLIC_APPWRITE_BUCKET_RESUMES,
     name: "resumes",
   },
 ];
@@ -28,6 +28,7 @@ buckets.forEach((col) => {
 
     getPreview: (fileId, options = {}) =>
       storage.getFilePreview(col.id, fileId, "200", "200"),
+
     getFileView: (fileId) => storage.getFileView(col.id, fileId),
 
     download: (fileId) => storage.getFileDownload(col.id, fileId),
