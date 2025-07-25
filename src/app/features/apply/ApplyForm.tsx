@@ -1,11 +1,12 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
 import { E164Number } from "libphonenumber-js";
 import en from "react-phone-number-input/locale/en.json";
 import { useCallback } from "react";
 import { useDropzone } from "react-dropzone";
+import ReCAPTCHA from "react-google-recaptcha";
 import { ApplicationService } from "../../services/applicationService";
 import { validateForm } from "../../utils/validation";
 
@@ -17,6 +18,7 @@ const inputClass2 =
 const labelClass = "block text-sm font-medium text-gray-700 dark:text-gray-300";
 
 const ApplyForm: React.FC = () => {
+  const recaptchaRef = useRef<ReCAPTCHA>(null);
   // Form state
   const [formData, setFormData] = useState({
     firstName: "",
@@ -37,6 +39,7 @@ const ApplyForm: React.FC = () => {
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
   const [submitStatus, setSubmitStatus] = useState<{
     type: "success" | "error" | null;
     message: string;
@@ -49,6 +52,14 @@ const ApplyForm: React.FC = () => {
     // Clear error when user starts typing
     if (errors[field]) {
       setErrors((prev) => ({ ...prev, [field]: "" }));
+    }
+  };
+
+  // Handle reCAPTCHA change
+  const handleRecaptchaChange = (token: string | null) => {
+    setRecaptchaToken(token);
+    if (token && errors.recaptcha) {
+      setErrors((prev) => ({ ...prev, recaptcha: "" }));
     }
   };
 
@@ -114,6 +125,16 @@ const ApplyForm: React.FC = () => {
     setIsSubmitting(true);
     setSubmitStatus({ type: null, message: "" });
 
+    // Validate reCAPTCHA first
+    if (!recaptchaToken) {
+      setErrors((prev) => ({
+        ...prev,
+        recaptcha: "Please complete the reCAPTCHA verification",
+      }));
+      setIsSubmitting(false);
+      return;
+    }
+
     // Validate form
     const validation = validateForm({
       ...formData,
@@ -128,14 +149,12 @@ const ApplyForm: React.FC = () => {
 
     try {
       // Submit the application
-      console.log(
-        "Submitting application with data:",
-        formData.preferredCountry
-      );
+
       const result = await ApplicationService.submitApplication(
         {
           ...formData,
           phone: formData.phone || "",
+          recaptchaToken: recaptchaToken,
         },
         uploadedFile
       );
@@ -145,6 +164,9 @@ const ApplyForm: React.FC = () => {
           type: "success",
           message: result.message || "Application submitted successfully!",
         });
+        setTimeout(() => {
+          setSubmitStatus({ type: null, message: "" });
+        }, 2000);
 
         // Reset form
         setFormData({
@@ -164,17 +186,29 @@ const ApplyForm: React.FC = () => {
         });
         setUploadedFile(null);
         setErrors({});
+        setRecaptchaToken(null);
+        recaptchaRef.current?.reset();
       } else {
         setSubmitStatus({
           type: "error",
           message: result.error || "Failed to submit application",
         });
+        setTimeout(() => {
+          setSubmitStatus({ type: null, message: "" });
+        }, 2000);
+        recaptchaRef.current?.reset();
+        setRecaptchaToken(null);
       }
     } catch (error) {
       setSubmitStatus({
         type: "error",
         message: "An unexpected error occurred. Please try again.",
       });
+      setTimeout(() => {
+        setSubmitStatus({ type: null, message: "" });
+      }, 2000);
+      recaptchaRef.current?.reset();
+      setRecaptchaToken(null);
     } finally {
       setIsSubmitting(false);
     }
@@ -540,6 +574,24 @@ const ApplyForm: React.FC = () => {
         )}
       </div>
 
+      {/* reCAPTCHA */}
+      <div>
+        <label className={labelClass}>
+          Verification <span className="text-red-500">*</span>
+        </label>
+        <div className="mt-2">
+          <ReCAPTCHA
+            ref={recaptchaRef}
+            sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || ""}
+            onChange={handleRecaptchaChange}
+            theme="light"
+          />
+          {errors.recaptcha && (
+            <p className="mt-2 text-sm text-red-600">{errors.recaptcha}</p>
+          )}
+        </div>
+      </div>
+
       {/* Status Message */}
       {submitStatus.type && (
         <div
@@ -556,9 +608,9 @@ const ApplyForm: React.FC = () => {
       {/* Submit */}
       <button
         type="submit"
-        disabled={isSubmitting}
+        disabled={isSubmitting || !recaptchaToken}
         className={`w-full py-3 rounded-lg font-semibold transform transition-all duration-1000 ${
-          isSubmitting
+          isSubmitting || !recaptchaToken
             ? "bg-gray-400 cursor-not-allowed"
             : "bg-gradient-to-r from-blue-600 via-blue-500 to-blue-400 hover:bg-gradient-to-r hover:from-blue-700 hover:via-blue-600 hover:to-blue-500 hover:scale-101"
         } text-white`}
