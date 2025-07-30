@@ -13,7 +13,7 @@ interface Application {
   lastName: string;
   email: string;
   birthday: string;
-  experience: string;
+  experience: string[];
   diploma: string;
   frenchLevel: string;
   englishLevel: string;
@@ -118,6 +118,44 @@ export default function AdminApplications() {
       return age - 1;
     }
     return age;
+  };
+
+  // Helper function to parse and format experience
+  const formatExperience = (experienceArray: string[]) => {
+    if (!experienceArray || experienceArray.length === 0) {
+      return "No experience listed";
+    }
+
+    return experienceArray.map((exp, index) => {
+      const [years, description] = exp.split(":");
+      return (
+        <div key={index} className="text-sm text-gray-900 dark:text-white">
+          <span className="font-medium">
+            {years} {years === "1" ? "year" : "years"}:
+          </span>{" "}
+          {description}
+        </div>
+      );
+    });
+  };
+
+  // Helper function to get experience summary for table
+  const getExperienceSummary = (experienceArray: string[]) => {
+    if (!experienceArray || experienceArray.length === 0) {
+      return "No experience";
+    }
+
+    const totalYears = experienceArray.reduce((total, exp) => {
+      const [years] = exp.split(":");
+      const yearNum = years === "10+" ? 10 : parseInt(years);
+      return total + (isNaN(yearNum) ? 0 : yearNum);
+    }, 0);
+
+    return `${totalYears}${
+      experienceArray.some((exp) => exp.includes("10+")) ? "+" : ""
+    } years total (${experienceArray.length} ${
+      experienceArray.length === 1 ? "role" : "roles"
+    })`;
   };
 
   return (
@@ -228,9 +266,9 @@ export default function AdminApplications() {
                             Available: {application.availability}
                           </div>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
+                        <td className="px-6 py-4">
                           <div className="text-sm text-gray-900 dark:text-white">
-                            {application.experience}
+                            {getExperienceSummary(application.experience)}
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
@@ -373,7 +411,7 @@ export default function AdminApplications() {
       {/* Application Details Modal */}
       {selectedApplication && (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
-          <div className="relative top-20 mx-auto p-5 border w-11/12 max-w-2xl shadow-lg rounded-md bg-white dark:bg-gray-800">
+          <div className="relative top-20 mx-auto p-5 border w-11/12 max-w-4xl shadow-lg rounded-md bg-white dark:bg-gray-800">
             <div className="mt-3">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-medium text-gray-900 dark:text-white">
@@ -399,7 +437,7 @@ export default function AdminApplications() {
                 </button>
               </div>
 
-              <div className="space-y-4 max-h-96 overflow-y-auto">
+              <div className="space-y-6 max-h-96 overflow-y-auto">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -452,18 +490,18 @@ export default function AdminApplications() {
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                      Experience
-                    </label>
-                    <p className="text-sm text-gray-900 dark:text-white">
-                      {selectedApplication.experience}
-                    </p>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                       Diploma
                     </label>
                     <p className="text-sm text-gray-900 dark:text-white">
                       {selectedApplication.diploma}
+                    </p>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                      Availability
+                    </label>
+                    <p className="text-sm text-gray-900 dark:text-white">
+                      {selectedApplication.availability}
                     </p>
                   </div>
                   <div>
@@ -480,14 +518,6 @@ export default function AdminApplications() {
                     </label>
                     <p className="text-sm text-gray-900 dark:text-white">
                       {selectedApplication.englishLevel}
-                    </p>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                      Availability
-                    </label>
-                    <p className="text-sm text-gray-900 dark:text-white">
-                      {selectedApplication.availability}
                     </p>
                   </div>
                   {selectedApplication.linkedinURL && (
@@ -514,6 +544,23 @@ export default function AdminApplications() {
                     </p>
                   </div>
                 </div>
+
+                {/* Experience Section - Full Width */}
+                <div className="col-span-full">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+                    Experience Details
+                  </label>
+                  <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 space-y-2">
+                    {selectedApplication.experience &&
+                    selectedApplication.experience.length > 0 ? (
+                      formatExperience(selectedApplication.experience)
+                    ) : (
+                      <p className="text-sm text-gray-500 dark:text-gray-400">
+                        No experience information provided
+                      </p>
+                    )}
+                  </div>
+                </div>
               </div>
 
               <div className="flex justify-end mt-6 space-x-3">
@@ -535,9 +582,7 @@ export default function AdminApplications() {
                         )
                       }
                       className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 text-sm font-medium"
-                    >
-                      Download Resume
-                    </button>
+                    ></button>
                   </>
                 )}
                 <button

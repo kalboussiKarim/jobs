@@ -17,9 +17,14 @@ const inputClass2 =
 
 const labelClass = "block text-sm font-medium text-gray-700 dark:text-gray-300";
 
-const ApplyForm: React.FC = () => {
-  // Form state
+interface Experience {
+  id: string;
+  years: string;
+  description: string;
+}
 
+const ApplyForm: React.FC = () => {
+  // Math question state
   const [mathQuestion, setMathQuestion] = useState({ question: "", answer: 0 });
   const [userAnswer, setUserAnswer] = useState("");
 
@@ -28,12 +33,14 @@ const ApplyForm: React.FC = () => {
   >([]);
   const [isLoadingJobs, setIsLoadingJobs] = useState(true);
 
+  // Experience state
+  const [experiences, setExperiences] = useState<Experience[]>([]);
+
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
     email: "",
     dob: "",
-    experience: "0",
     diploma: "CAP/BEP",
     frenchLevel: "A1",
     englishLevel: "A1",
@@ -114,6 +121,54 @@ const ApplyForm: React.FC = () => {
 
     fetchTargetJobs();
   }, []);
+
+  useEffect(() => {
+    if (targetJobs.length > 0 && !formData.targetJob) {
+      setFormData((prev) => ({
+        ...prev,
+        targetJob: targetJobs[0].field,
+      }));
+    }
+  }, [targetJobs, formData.targetJob]);
+
+  // Experience management functions
+  const addExperience = () => {
+    if (experiences.length < 3) {
+      const newExperience: Experience = {
+        id: Date.now().toString(),
+        years: "1",
+        description: "",
+      };
+      setExperiences([...experiences, newExperience]);
+    }
+  };
+
+  const removeExperience = (id: string) => {
+    setExperiences(experiences.filter((exp) => exp.id !== id));
+    // Clear any related errors
+    setErrors((prev) => {
+      const newErrors = { ...prev };
+      delete newErrors[`experience-${id}-description`];
+      return newErrors;
+    });
+  };
+
+  const updateExperience = (
+    id: string,
+    field: keyof Experience,
+    value: string
+  ) => {
+    setExperiences(
+      experiences.map((exp) =>
+        exp.id === id ? { ...exp, [field]: value } : exp
+      )
+    );
+
+    // Clear error when user starts typing
+    if (field === "description" && errors[`experience-${id}-description`]) {
+      setErrors((prev) => ({ ...prev, [`experience-${id}-description`]: "" }));
+    }
+  };
 
   // Handle input changes
   const handleInputChange = (field: string, value: any) => {
@@ -207,6 +262,8 @@ const ApplyForm: React.FC = () => {
       return;
     }
 
+    // Validate experiences
+
     // Validate form
     const validation = validateForm({
       ...formData,
@@ -220,6 +277,12 @@ const ApplyForm: React.FC = () => {
     }
 
     try {
+      // Convert experiences to string array format "years:description"
+      const experienceStrings =
+        experiences.length > 0
+          ? experiences.map((exp) => `${exp.years}:${exp.description}`)
+          : [];
+
       // Submit the application
       console.log(
         "Submitting application with data:",
@@ -229,6 +292,7 @@ const ApplyForm: React.FC = () => {
         {
           ...formData,
           phone: formData.phone || "",
+          experience: experienceStrings, // Send as array of strings
         },
         uploadedFile
       );
@@ -248,7 +312,6 @@ const ApplyForm: React.FC = () => {
           lastName: "",
           email: "",
           dob: "",
-          experience: "0",
           diploma: "CAP/BEP",
           frenchLevel: "A1",
           englishLevel: "A1",
@@ -258,6 +321,7 @@ const ApplyForm: React.FC = () => {
           preferredCountry: "France",
           linkedinURL: "",
         });
+        setExperiences([]);
         setUploadedFile(null);
         setErrors({});
         setUserAnswer("");
@@ -381,24 +445,107 @@ const ApplyForm: React.FC = () => {
         )}
       </div>
 
-      {/* Years of Experience */}
+      {/* Experience Section */}
       <div>
-        <label htmlFor="experience" className={labelClass}>
-          Years of Experience <span className="text-red-500">*</span>
-        </label>
-        <select
-          id="experience"
-          className={inputClass}
-          value={formData.experience}
-          onChange={(e) => handleInputChange("experience", e.target.value)}
-        >
-          {[...Array(11).keys()].map((year) => (
-            <option key={year} value={year.toString()}>
-              {year}
-            </option>
-          ))}
-          <option value="10+">10+</option>
-        </select>
+        <div className="flex items-center justify-between mb-3">
+          <label className={labelClass}>Experience</label>
+          <button
+            type="button"
+            onClick={addExperience}
+            disabled={experiences.length >= 3}
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+              experiences.length >= 3
+                ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                : "bg-blue-600 text-white hover:bg-blue-700"
+            }`}
+          >
+            Add Experience ({experiences.length}/3)
+          </button>
+        </div>
+
+        {experiences.length === 0 && (
+          <div className="p-4 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg text-center">
+            <p className="text-gray-500 dark:text-gray-400">
+              No experiences added yet. Click "Add Experience" to add your work
+              experience (optional).
+            </p>
+          </div>
+        )}
+
+        {experiences.map((experience, index) => (
+          <div
+            key={experience.id}
+            className="p-4 border border-gray-300 dark:border-gray-600 rounded-lg mb-3 bg-gray-50 dark:bg-gray-800"
+          >
+            <div className="flex items-center justify-between mb-3">
+              <h4 className="font-medium text-gray-800 dark:text-gray-200">
+                Experience #{index + 1}
+              </h4>
+              <button
+                type="button"
+                onClick={() => removeExperience(experience.id)}
+                className="text-red-600 hover:text-red-800 text-sm font-medium"
+              >
+                Remove
+              </button>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">
+                  Years of Experience
+                </label>
+                <select
+                  value={experience.years}
+                  onChange={(e) =>
+                    updateExperience(experience.id, "years", e.target.value)
+                  }
+                  className={inputClass}
+                >
+                  {[...Array(10).keys()].map((year) => (
+                    <option key={year + 1} value={(year + 1).toString()}>
+                      {year + 1} {year + 1 === 1 ? "year" : "years"}
+                    </option>
+                  ))}
+                  <option value="10+">10+ years</option>
+                </select>
+              </div>
+
+              <div className="md:col-span-2">
+                <label className="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">
+                  Experience Description <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  value={experience.description}
+                  onChange={(e) =>
+                    updateExperience(
+                      experience.id,
+                      "description",
+                      e.target.value
+                    )
+                  }
+                  placeholder="e.g., Software Engineer, Frontend Developer, etc."
+                  className={`${inputClass} ${
+                    errors[`experience-${experience.id}-description`]
+                      ? "border-red-500"
+                      : ""
+                  }`}
+                  required
+                />
+                {errors[`experience-${experience.id}-description`] && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors[`experience-${experience.id}-description`]}
+                  </p>
+                )}
+              </div>
+            </div>
+          </div>
+        ))}
+
+        {errors.experiences && (
+          <p className="text-red-500 text-sm mt-1">{errors.experiences}</p>
+        )}
       </div>
 
       {/* Diploma */}
@@ -476,13 +623,16 @@ const ApplyForm: React.FC = () => {
           {isLoadingJobs ? (
             <option value="">Loading...</option>
           ) : (
-            targetJobs.map((job) => (
-              <option key={job.$id} value={job.field}>
-                {job.field
-                  .replace("-", " ")
-                  .replace(/\b\w/g, (l) => l.toUpperCase())}
-              </option>
-            ))
+            <>
+              {!formData.targetJob && <option value="">Select a job...</option>}
+              {targetJobs.map((job) => (
+                <option key={job.$id} value={job.field}>
+                  {job.field
+                    .replace("-", " ")
+                    .replace(/\b\w/g, (l) => l.toUpperCase())}
+                </option>
+              ))}
+            </>
           )}
         </select>
         {isLoadingJobs && (
