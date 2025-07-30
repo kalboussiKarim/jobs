@@ -8,6 +8,7 @@ import { useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 import { ApplicationService } from "../../services/applicationService";
 import { validateForm } from "../../utils/validation";
+import db from "@/app/backend/databases";
 
 const inputClass =
   "mt-1 block w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white bg-white shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all duration-150";
@@ -22,6 +23,11 @@ const ApplyForm: React.FC = () => {
   const [mathQuestion, setMathQuestion] = useState({ question: "", answer: 0 });
   const [userAnswer, setUserAnswer] = useState("");
 
+  const [targetJobs, setTargetJobs] = useState<
+    Array<{ $id: string; field: string; visible: boolean }>
+  >([]);
+  const [isLoadingJobs, setIsLoadingJobs] = useState(true);
+
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -31,7 +37,7 @@ const ApplyForm: React.FC = () => {
     diploma: "CAP/BEP",
     frenchLevel: "A1",
     englishLevel: "A1",
-    targetJob: "developer",
+    targetJob: "",
     availability: "",
     phone: undefined as E164Number | undefined,
     preferredCountry: "France",
@@ -76,6 +82,37 @@ const ApplyForm: React.FC = () => {
   // Generate initial math question
   useEffect(() => {
     generateMathQuestion();
+  }, []);
+
+  // Fetch interest fields from database
+  useEffect(() => {
+    const fetchTargetJobs = async () => {
+      try {
+        setIsLoadingJobs(true);
+        const response = await db.intrestFields.list();
+        const visibleJobs = response.documents.filter(
+          (job: any) => job.visible === true
+        );
+        setTargetJobs(visibleJobs);
+      } catch (error) {
+        console.error("Error fetching target jobs:", error);
+        // Fallback to default options if fetch fails
+        setTargetJobs([
+          { $id: "fallback-1", field: "developer", visible: true },
+          { $id: "fallback-2", field: "designer", visible: true },
+          { $id: "fallback-3", field: "project-manager", visible: true },
+          { $id: "fallback-4", field: "qa", visible: true },
+          { $id: "fallback-5", field: "sysadmin", visible: true },
+          { $id: "fallback-6", field: "data-analyst", visible: true },
+          { $id: "fallback-7", field: "marketing", visible: true },
+          { $id: "fallback-8", field: "sales", visible: true },
+        ]);
+      } finally {
+        setIsLoadingJobs(false);
+      }
+    };
+
+    fetchTargetJobs();
   }, []);
 
   // Handle input changes
@@ -434,16 +471,25 @@ const ApplyForm: React.FC = () => {
           className={inputClass}
           value={formData.targetJob}
           onChange={(e) => handleInputChange("targetJob", e.target.value)}
+          disabled={isLoadingJobs}
         >
-          <option value="developer">Software Developer</option>
-          <option value="designer">UI/UX Designer</option>
-          <option value="project-manager">Project Manager</option>
-          <option value="qa">Quality Assurance</option>
-          <option value="sysadmin">System Administrator</option>
-          <option value="data-analyst">Data Analyst</option>
-          <option value="marketing">Marketing Specialist</option>
-          <option value="sales">Sales Representative</option>
+          {isLoadingJobs ? (
+            <option value="">Loading...</option>
+          ) : (
+            targetJobs.map((job) => (
+              <option key={job.$id} value={job.field}>
+                {job.field
+                  .replace("-", " ")
+                  .replace(/\b\w/g, (l) => l.toUpperCase())}
+              </option>
+            ))
+          )}
         </select>
+        {isLoadingJobs && (
+          <p className="text-sm text-gray-500 mt-1">
+            Loading available positions...
+          </p>
+        )}
       </div>
 
       {/* Availability */}
@@ -565,6 +611,8 @@ const ApplyForm: React.FC = () => {
           <option value="Netherlands">Netherlands</option>
           <option value="Belgium">Belgium</option>
           <option value="Sweden">Sweden</option>
+          <option value="Canada">Canada</option>
+          <option value="United Kingdom">United Kingdom</option>
         </select>
       </div>
 

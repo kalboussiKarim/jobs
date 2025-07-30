@@ -8,6 +8,7 @@ import Navbar from "./components/common/Navbar";
 import Footer from "./components/common/Footer";
 import { ThemeProvider } from "./lib/ThemeContext";
 import WhatsAppBubble from "./components/common/WhatsAppBubble";
+import { AuthProvider } from "./lib/AuthContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,16 +18,18 @@ interface RootLayoutProps {
 
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
-    <html lang="en">
+    <html lang="en" data-scroll-behavior="smooth">
       <body className={inter.className} suppressHydrationWarning>
         <ThemeProvider>
           <LanguageProvider>
-            <div className="min-h-screen flex flex-col">
-              <Navbar />
-              <main className="flex-grow">{children}</main>
-              <Footer />
-              <WhatsAppBubble />
-            </div>
+            <AuthProvider>
+              <div className="min-h-screen flex flex-col">
+                <Navbar />
+                <main className="flex-grow">{children}</main>
+                <Footer />
+                <WhatsAppBubble />
+              </div>
+            </AuthProvider>
           </LanguageProvider>
         </ThemeProvider>
       </body>

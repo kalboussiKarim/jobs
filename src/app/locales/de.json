@@ -20,7 +20,7 @@
   },
 
   "hero": {
-    "title": "Ihr Tor nach Europa",
+    "title": "Ihr Tor nach Europa und Kanada",
     "description": "Wir unterstützen talentierte Menschen aus dem Maghreb (Tunesien, Marokko, Algerien) bei der Suche nach beruflichen Möglichkeiten in der Europäischen Union. Von der Jobsuche bis zum Erhalt der Blauen Karte EU.",
     "button": "Sehen Sie sich unseren Prozess an"
   },
@@ -40,7 +40,8 @@
   },
 
   "process": {
-    "title": "Unser Prozess",
+    "title": "Unsere Dienstleistungen",
+    "description": "Wir bieten eine Reihe von Dienstleistungen an, um Ihnen zu helfen, Ihren Karriereweg in Europa zu navigieren, einschließlich Jobvermittlung, Visumsunterstützung und berufliche Entwicklung.",
     "card1": {
       "title": "Profilbewertung",
       "description": "Umfassende Analyse Ihres Profils, Ihrer Fähigkeiten und beruflichen Ziele zur Identifizierung der besten Chancen."

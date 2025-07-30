@@ -48,13 +48,16 @@ const ProcessSection: React.FC = () => {
   const { t } = useLanguage();
   return (
     <section
-      id="process"
+      id="services"
       className="pb-10 pt-20 bg-gray-50 dark:bg-gray-900 transition-colors duration-300"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center mb-12">
         <h2 className="text-3xl md:text-4xl font-bold text-blue-400 dark:text-white mb-15">
           {t("process.title")}
         </h2>
+        <p className="text-lg text-gray-600 dark:text-gray-300">
+          {t("process.description")}
+        </p>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {processSteps.map((step, index) => (

@@ -50,8 +50,9 @@ const WhatsAppBubble: React.FC<WhatsAppBubbleProps> = ({
           <div className="text-sm font-medium">{t("common.Needhelp")}</div>
           <div className="absolute -bottom-1 right-4 w-2 h-2 bg-white dark:bg-gray-800 border-r border-b dark:border-gray-700 transform rotate-45"></div>
           <button
+            name="close-tooltip"
             onClick={() => setShowTooltip(false)}
-            className="absolute -top-1 -right-1 w-5 h-5 bg-gray-200 dark:bg-gray-600 rounded-full flex items-center justify-center text-gray-500 dark:text-gray-400 hover:bg-gray-300 dark:hover:bg-gray-500 transition-colors"
+            className="absolute -top-1 -right-1 w-5 h-5 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-full flex items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
           >
             <X className="w-3 h-3" />
           </button>

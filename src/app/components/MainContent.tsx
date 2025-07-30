@@ -13,9 +13,9 @@ const MainContent: React.FC = () => {
     <div>
       <HeroSection />
       <AboutSection />
-      <ServicesSection />
-      <StatsSection />
       <ProcessusSection />
+      {/*<ServicesSection />*/}
+      <StatsSection />
       <ApplyNowSection />
     </div>
   );

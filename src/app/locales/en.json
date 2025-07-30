@@ -20,7 +20,7 @@
   },
 
   "hero": {
-    "title": "Your Gateway to Europe",
+    "title": "Your Gateway to Europe and Canada",
     "subtitle": "Discover the power of innovation and excellence",
     "description": "We support talented individuals from the Maghreb (Tunisia, Morocco, Algeria) in finding professional opportunities in the European Union. From job searches to obtaining the EU Blue Card.",
     "button": "See our process"
@@ -41,7 +41,8 @@
   },
 
   "process": {
-    "title": "Our Process",
+    "title": "Our Services",
+    "description": "We offer a range of services to help you navigate your career journey in Europe, including job placement, visa assistance, and professional development.",
     "card1": {
       "title": "Profile Assessment",
       "description": "Comprehensive analysis of your profile, skills, and career goals to identify the best opportunities."

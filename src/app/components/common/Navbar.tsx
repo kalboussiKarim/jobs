@@ -35,7 +35,6 @@ const Navbar: React.FC = () => {
     { key: "common.home", href: "/#home" },
     { key: "common.about", href: "/#about" },
     { key: "common.services", href: "/#services" },
-    { key: "common.process", href: "/#process" },
     { key: "common.apply", href: "/#apply" },
   ];
 
