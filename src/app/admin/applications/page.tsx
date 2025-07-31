@@ -69,29 +69,42 @@ export default function AdminApplications() {
     setCurrentPage(page);
   };
 
+  // Fixed resume viewing function
   const handleViewResume = async (resumeId: string) => {
     try {
-      const fileView = st.resumes.getFileView(resumeId);
-      window.open(fileView.href, "_blank");
-    } catch (err) {
+      // Get the file view URL - this returns a URL object
+      const fileViewUrl = st.resumes.getFileView(resumeId);
+
+      // Open the URL in a new tab
+      window.open(fileViewUrl, "_blank");
+    } catch (err: any) {
       console.error("Error viewing resume:", err);
+      setError("Failed to view resume: " + err.message);
     }
   };
 
+  // Fixed resume download function
   const handleDownloadResume = async (
     resumeId: string,
     applicantName: string
   ) => {
     try {
-      const download = st.resumes.download(resumeId);
+      // Get the download URL - this returns a URL object
+      const downloadUrl = st.resumes.download(resumeId);
+
+      // Create a temporary link element for download
       const link = document.createElement("a");
-      link.href = download.href;
+      link.href = downloadUrl.toString(); // Convert URL to string
       link.download = `${applicantName}_resume.pdf`;
+      link.target = "_blank";
+
+      // Trigger the download
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-    } catch (err) {
+    } catch (err: any) {
       console.error("Error downloading resume:", err);
+      setError("Failed to download resume: " + err.message);
     }
   };
 
@@ -158,6 +171,33 @@ export default function AdminApplications() {
     })`;
   };
 
+  const handleDeleteApplication = async (
+    applicationId: string,
+    applicantName: string
+  ) => {
+    if (
+      !confirm(
+        `Are you sure you want to delete the application from ${applicantName}? This action cannot be undone.`
+      )
+    ) {
+      return;
+    }
+
+    try {
+      await db.applications.delete(applicationId);
+
+      // Refresh the applications list
+      await loadApplications(currentPage);
+
+      // If current page becomes empty and it's not the first page, go to previous page
+      if (applications.length === 1 && currentPage > 1) {
+        setCurrentPage(currentPage - 1);
+      }
+    } catch (err: any) {
+      setError("Failed to delete application: " + err.message);
+    }
+  };
+
   return (
     <AdminLayout>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -184,6 +224,12 @@ export default function AdminApplications() {
         {error && (
           <div className="bg-red-50 dark:bg-red-900/50 border border-red-200 dark:border-red-800 rounded-md p-4 mb-6">
             <p className="text-red-800 dark:text-red-200">{error}</p>
+            <button
+              onClick={() => setError("")}
+              className="mt-2 text-sm text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-200"
+            >
+              Dismiss
+            </button>
           </div>
         )}
 
@@ -282,36 +328,52 @@ export default function AdminApplications() {
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
                           {formatDate(application.$createdAt)}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
-                          <button
-                            onClick={() => setSelectedApplication(application)}
-                            className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300"
-                          >
-                            View Details
-                          </button>
-                          {application.resumeURL && (
-                            <>
-                              <button
-                                onClick={() =>
-                                  handleViewResume(application.resumeURL!)
-                                }
-                                className="text-green-600 hover:text-green-900 dark:text-green-400 dark:hover:text-green-300"
-                              >
-                                View Resume
-                              </button>
-                              <button
-                                onClick={() =>
-                                  handleDownloadResume(
-                                    application.resumeURL!,
-                                    `${application.firstName}_${application.lastName}`
-                                  )
-                                }
-                                className="text-purple-600 hover:text-purple-900 dark:text-purple-400 dark:hover:text-purple-300"
-                              >
-                                Download
-                              </button>
-                            </>
-                          )}
+                        <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                          <div className="flex justify-end space-x-2">
+                            <button
+                              onClick={() =>
+                                setSelectedApplication(application)
+                              }
+                              className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300"
+                            >
+                              View Details
+                            </button>
+                            {application.resumeURL && (
+                              <>
+                                <button
+                                  onClick={() =>
+                                    handleViewResume(application.resumeURL!)
+                                  }
+                                  className="text-green-600 hover:text-green-900 dark:text-green-400 dark:hover:text-green-300"
+                                >
+                                  View Resume
+                                </button>
+                                <button
+                                  onClick={() =>
+                                    handleDownloadResume(
+                                      application.resumeURL!,
+                                      `${application.firstName}_${application.lastName}`
+                                    )
+                                  }
+                                  className="text-purple-600 hover:text-purple-900 dark:text-purple-400 dark:hover:text-purple-300"
+                                >
+                                  Download
+                                </button>
+                              </>
+                            )}
+                            <button
+                              onClick={() =>
+                                handleDeleteApplication(
+                                  application.$id,
+                                  `${application.firstName} ${application.lastName}`
+                                )
+                              }
+                              className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300"
+                              title="Delete Application"
+                            >
+                              Delete
+                            </button>
+                          </div>
                         </td>
                       </tr>
                     ))}
@@ -582,7 +644,9 @@ export default function AdminApplications() {
                         )
                       }
                       className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 text-sm font-medium"
-                    ></button>
+                    >
+                      Download Resume
+                    </button>
                   </>
                 )}
                 <button

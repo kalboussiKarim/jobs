@@ -52,9 +52,11 @@ buckets.forEach((col) => {
     getPreview: (fileId: string, options: any = {}) =>
       storage.getFilePreview(col.id, fileId),
 
-    getFileView: (fileId: string) => storage.getFileView(col.id, fileId),
+    getFileView: (fileId: string, token?: string) =>
+      storage.getFileView(col.id, fileId, token),
 
-    download: (fileId: string) => storage.getFileDownload(col.id, fileId),
+    download: (fileId: string, token?: string) =>
+      storage.getFileDownload(col.id, fileId, token),
   };
 });
 
