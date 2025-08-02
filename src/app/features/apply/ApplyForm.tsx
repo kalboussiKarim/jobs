@@ -332,9 +332,8 @@ const ApplyForm: React.FC = () => {
       if (duplicateCheck.documents.length > 0) {
         setErrors((prev) => ({
           ...prev,
-          email:
+          duplicate:
             "You have already applied for this position with this email address.",
-          targetJob: "You have already applied for this position.",
         }));
         setIsSubmitting(false);
         return;
@@ -1032,6 +1031,12 @@ const ApplyForm: React.FC = () => {
           }`}
         >
           {submitStatus.message}
+        </div>
+      )}
+      {/* Duplicate Application Error */}
+      {errors.duplicate && (
+        <div className="p-4 rounded-lg bg-red-100 border border-red-400 text-red-700">
+          {errors.duplicate}
         </div>
       )}
 
