@@ -108,14 +108,20 @@ export default function AdminApplications() {
     }
   };
 
+  // Updated formatDate function to show date and time on separate lines
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
+    const date = new Date(dateString);
+    const dateOnly = date.toLocaleDateString("en-US", {
       year: "numeric",
       month: "short",
       day: "numeric",
+    });
+    const timeOnly = date.toLocaleTimeString("en-US", {
       hour: "2-digit",
       minute: "2-digit",
     });
+
+    return { date: dateOnly, time: timeOnly };
   };
 
   const calculateAge = (birthday: string) => {
@@ -169,6 +175,20 @@ export default function AdminApplications() {
     } years total (${experienceArray.length} ${
       experienceArray.length === 1 ? "role" : "roles"
     })`;
+  };
+
+  // Helper function to parse and display preferred countries
+  const formatPreferredCountries = (preferredCountryString: string) => {
+    if (!preferredCountryString) {
+      return ["N/A", "N/A", "N/A"];
+    }
+
+    const countries = preferredCountryString.split(":");
+    return [
+      countries[0] || "N/A",
+      countries[1] || "N/A",
+      countries[2] || "N/A",
+    ];
   };
 
   const handleDeleteApplication = async (
@@ -264,6 +284,9 @@ export default function AdminApplications() {
                         Experience
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                        Preferred Countries
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                         Languages
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
@@ -275,108 +298,128 @@ export default function AdminApplications() {
                     </tr>
                   </thead>
                   <tbody className="bg-gray-100 dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                    {applications.map((application) => (
-                      <tr
-                        key={application.$id}
-                        className="hover:bg-gray-200 dark:hover:bg-gray-700"
-                      >
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div>
-                            <div className="text-sm font-medium text-gray-900 dark:text-white">
-                              {application.firstName} {application.lastName}
+                    {applications.map((application) => {
+                      const preferredCountries = formatPreferredCountries(
+                        application.preferredCountry
+                      );
+                      const { date, time } = formatDate(application.$createdAt);
+
+                      return (
+                        <tr
+                          key={application.$id}
+                          className="hover:bg-gray-200 dark:hover:bg-gray-700"
+                        >
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div>
+                              <div className="text-sm font-medium text-gray-900 dark:text-white">
+                                {application.firstName} {application.lastName}
+                              </div>
+                              <div className="text-sm text-gray-500 dark:text-gray-400">
+                                Age: {calculateAge(application.birthday)}
+                              </div>
+                              <div className="text-sm text-gray-500 dark:text-gray-400">
+                                {application.diploma}
+                              </div>
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="text-sm text-gray-900 dark:text-white">
+                              {application.email}
                             </div>
                             <div className="text-sm text-gray-500 dark:text-gray-400">
-                              Age: {calculateAge(application.birthday)}
+                              {application.phone}
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="text-sm text-gray-900 dark:text-white">
+                              {application.targetJob}
                             </div>
                             <div className="text-sm text-gray-500 dark:text-gray-400">
-                              {application.diploma}
+                              Available: {application.availability}
                             </div>
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm text-gray-900 dark:text-white">
-                            {application.email}
-                          </div>
-                          <div className="text-sm text-gray-500 dark:text-gray-400">
-                            {application.phone}
-                          </div>
-                          <div className="text-sm text-gray-500 dark:text-gray-400">
-                            {application.preferredCountry}
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm text-gray-900 dark:text-white">
-                            {application.targetJob}
-                          </div>
-                          <div className="text-sm text-gray-500 dark:text-gray-400">
-                            Available: {application.availability}
-                          </div>
-                        </td>
-                        <td className="px-6 py-4">
-                          <div className="text-sm text-gray-900 dark:text-white">
-                            {getExperienceSummary(application.experience)}
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm text-gray-900 dark:text-white">
-                            FR: {application.frenchLevel}
-                          </div>
-                          <div className="text-sm text-gray-500 dark:text-gray-400">
-                            EN: {application.englishLevel}
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                          {formatDate(application.$createdAt)}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                          <div className="flex justify-end space-x-2">
-                            <button
-                              onClick={() =>
-                                setSelectedApplication(application)
-                              }
-                              className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300"
-                            >
-                              View Details
-                            </button>
-                            {application.resumeURL && (
-                              <>
-                                <button
-                                  onClick={() =>
-                                    handleViewResume(application.resumeURL!)
-                                  }
-                                  className="text-green-600 hover:text-green-900 dark:text-green-400 dark:hover:text-green-300"
-                                >
-                                  View Resume
-                                </button>
-                                <button
-                                  onClick={() =>
-                                    handleDownloadResume(
-                                      application.resumeURL!,
-                                      `${application.firstName}_${application.lastName}`
-                                    )
-                                  }
-                                  className="text-purple-600 hover:text-purple-900 dark:text-purple-400 dark:hover:text-purple-300"
-                                >
-                                  Download
-                                </button>
-                              </>
-                            )}
-                            <button
-                              onClick={() =>
-                                handleDeleteApplication(
-                                  application.$id,
-                                  `${application.firstName} ${application.lastName}`
-                                )
-                              }
-                              className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300"
-                              title="Delete Application"
-                            >
-                              Delete
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
+                          </td>
+                          <td className="px-6 py-4">
+                            <div className="text-sm text-gray-900 dark:text-white">
+                              {getExperienceSummary(application.experience)}
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="text-sm text-gray-900 dark:text-white">
+                              1st: {preferredCountries[0]}
+                            </div>
+                            <div className="text-sm text-gray-500 dark:text-gray-400">
+                              2nd: {preferredCountries[1]}
+                            </div>
+                            <div className="text-sm text-gray-500 dark:text-gray-400">
+                              3rd: {preferredCountries[2]}
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="text-sm text-gray-900 dark:text-white">
+                              FR: {application.frenchLevel}
+                            </div>
+                            <div className="text-sm text-gray-500 dark:text-gray-400">
+                              EN: {application.englishLevel}
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="text-sm text-gray-900 dark:text-white">
+                              {date}
+                            </div>
+                            <div className="text-sm text-gray-500 dark:text-gray-400">
+                              {time}
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 text-center text-sm font-medium">
+                            <div className="flex flex-col items-center space-y-1">
+                              <button
+                                onClick={() =>
+                                  setSelectedApplication(application)
+                                }
+                                className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300"
+                              >
+                                View Details
+                              </button>
+                              {application.resumeURL && (
+                                <>
+                                  <button
+                                    onClick={() =>
+                                      handleViewResume(application.resumeURL!)
+                                    }
+                                    className="text-green-600 hover:text-green-900 dark:text-green-400 dark:hover:text-green-300"
+                                  >
+                                    View Resume
+                                  </button>
+                                  <button
+                                    onClick={() =>
+                                      handleDownloadResume(
+                                        application.resumeURL!,
+                                        `${application.firstName}_${application.lastName}`
+                                      )
+                                    }
+                                    className="text-purple-600 hover:text-purple-900 dark:text-purple-400 dark:hover:text-purple-300"
+                                  >
+                                    Download
+                                  </button>
+                                </>
+                              )}
+                              <button
+                                onClick={() =>
+                                  handleDeleteApplication(
+                                    application.$id,
+                                    `${application.firstName} ${application.lastName}`
+                                  )
+                                }
+                                className="mr-6 ml-6 text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300"
+                                title="Delete Application"
+                              >
+                                Delete
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })}
                   </tbody>
                 </table>
               </div>
@@ -544,11 +587,17 @@ export default function AdminApplications() {
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                      Preferred Country
+                      Preferred Countries
                     </label>
-                    <p className="text-sm text-gray-900 dark:text-white">
-                      {selectedApplication.preferredCountry}
-                    </p>
+                    <div className="text-sm text-gray-900 dark:text-white">
+                      {formatPreferredCountries(
+                        selectedApplication.preferredCountry
+                      ).map((country, index) => (
+                        <div key={index}>
+                          {index + 1}. {country}
+                        </div>
+                      ))}
+                    </div>
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -601,9 +650,14 @@ export default function AdminApplications() {
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                       Applied On
                     </label>
-                    <p className="text-sm text-gray-900 dark:text-white">
-                      {formatDate(selectedApplication.$createdAt)}
-                    </p>
+                    <div className="text-sm text-gray-900 dark:text-white">
+                      <div>
+                        {formatDate(selectedApplication.$createdAt).date}
+                      </div>
+                      <div className="text-gray-500 dark:text-gray-400">
+                        {formatDate(selectedApplication.$createdAt).time}
+                      </div>
+                    </div>
                   </div>
                 </div>
 

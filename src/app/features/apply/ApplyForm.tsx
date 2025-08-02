@@ -9,6 +9,7 @@ import { useDropzone } from "react-dropzone";
 import { ApplicationService } from "../../services/applicationService";
 import { validateForm } from "../../utils/validation";
 import db from "@/app/backend/databases";
+import { Query } from "appwrite";
 
 const inputClass =
   "mt-1 block w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white bg-white shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all duration-150";
@@ -36,6 +37,17 @@ const ApplyForm: React.FC = () => {
   // Experience state
   const [experiences, setExperiences] = useState<Experience[]>([]);
 
+  // Available countries list
+  const availableCountries = [
+    "France",
+    "Germany",
+    "Netherlands",
+    "Belgium",
+    "Sweden",
+    "Canada",
+    "United Kingdom",
+  ];
+
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -47,7 +59,9 @@ const ApplyForm: React.FC = () => {
     targetJob: "",
     availability: "",
     phone: undefined as E164Number | undefined,
-    preferredCountry: "France",
+    preferredCountry1: "France",
+    preferredCountry2: "Germany",
+    preferredCountry3: "Netherlands",
     linkedinURL: "",
   });
 
@@ -178,6 +192,11 @@ const ApplyForm: React.FC = () => {
     if (errors[field]) {
       setErrors((prev) => ({ ...prev, [field]: "" }));
     }
+
+    // Clear country validation errors when any country changes
+    if (field.startsWith("preferredCountry")) {
+      setErrors((prev) => ({ ...prev, preferredCountries: "" }));
+    }
   };
 
   // Handle math answer change
@@ -200,6 +219,47 @@ const ApplyForm: React.FC = () => {
     } else {
       setErrors((prev) => ({ ...prev, phone: "" }));
     }
+  };
+
+  // Validate preferred countries
+  const validatePreferredCountries = () => {
+    const countries = [
+      formData.preferredCountry1,
+      formData.preferredCountry2,
+      formData.preferredCountry3,
+    ];
+
+    const uniqueCountries = new Set(countries);
+    if (uniqueCountries.size !== 3) {
+      setErrors((prev) => ({
+        ...prev,
+        preferredCountries: "Please select 3 different countries.",
+      }));
+      return false;
+    }
+
+    setErrors((prev) => ({ ...prev, preferredCountries: "" }));
+    return true;
+  };
+
+  // Get available countries for a specific dropdown (excluding already selected ones)
+  const getAvailableCountriesFor = (currentField: string) => {
+    const selectedCountries = [
+      formData.preferredCountry1,
+      formData.preferredCountry2,
+      formData.preferredCountry3,
+    ];
+
+    // Get the current value for this field
+    const currentValue = formData[
+      currentField as keyof typeof formData
+    ] as string;
+
+    // Filter out countries that are selected in other fields
+    return availableCountries.filter(
+      (country) =>
+        country === currentValue || !selectedCountries.includes(country)
+    );
   };
 
   // File drop handler
@@ -262,7 +322,33 @@ const ApplyForm: React.FC = () => {
       return;
     }
 
-    // Validate experiences
+    // Check for duplicate application
+    try {
+      const duplicateCheck = await db.applications.list([
+        Query.equal("email", formData.email),
+        Query.equal("targetJob", formData.targetJob),
+      ]);
+
+      if (duplicateCheck.documents.length > 0) {
+        setErrors((prev) => ({
+          ...prev,
+          email:
+            "You have already applied for this position with this email address.",
+          targetJob: "You have already applied for this position.",
+        }));
+        setIsSubmitting(false);
+        return;
+      }
+    } catch (error) {
+      console.error("Error checking for duplicate application:", error);
+      // Continue with submission if check fails to avoid blocking legitimate applications
+    }
+
+    // Validate preferred countries
+    if (!validatePreferredCountries()) {
+      setIsSubmitting(false);
+      return;
+    }
 
     // Validate form
     const validation = validateForm({
@@ -283,15 +369,28 @@ const ApplyForm: React.FC = () => {
           ? experiences.map((exp) => `${exp.years}:${exp.description}`)
           : [];
 
+      // Combine preferred countries into a single string
+      const preferredCountryString = `${formData.preferredCountry1}:${formData.preferredCountry2}:${formData.preferredCountry3}`;
+
       // Submit the application
       console.log(
-        "Submitting application with data:",
-        formData.preferredCountry
+        "Submitting application with preferred countries:",
+        preferredCountryString
       );
       const result = await ApplicationService.submitApplication(
         {
-          ...formData,
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          email: formData.email,
+          dob: formData.dob,
+          diploma: formData.diploma,
+          frenchLevel: formData.frenchLevel,
+          englishLevel: formData.englishLevel,
+          targetJob: formData.targetJob,
+          availability: formData.availability,
           phone: formData.phone || "",
+          preferredCountry: preferredCountryString, // Send as combined string
+          linkedinURL: formData.linkedinURL,
           experience: experienceStrings, // Send as array of strings
         },
         uploadedFile
@@ -318,7 +417,9 @@ const ApplyForm: React.FC = () => {
           targetJob: "developer",
           availability: "",
           phone: undefined,
-          preferredCountry: "France",
+          preferredCountry1: "France",
+          preferredCountry2: "Germany",
+          preferredCountry3: "Netherlands",
           linkedinURL: "",
         });
         setExperiences([]);
@@ -743,27 +844,97 @@ const ApplyForm: React.FC = () => {
         )}
       </div>
 
-      {/* Country */}
+      {/* Preferred Countries */}
       <div>
-        <label htmlFor="country" className={labelClass}>
-          Preferred Country
+        <label className={labelClass}>
+          Preferred Countries (Select 3) <span className="text-red-500">*</span>
         </label>
-        <select
-          id="country"
-          className={inputClass}
-          value={formData.preferredCountry}
-          onChange={(e) =>
-            handleInputChange("preferredCountry", e.target.value)
-          }
-        >
-          <option value="France">France</option>
-          <option value="Germany">Germany</option>
-          <option value="Netherlands">Netherlands</option>
-          <option value="Belgium">Belgium</option>
-          <option value="Sweden">Sweden</option>
-          <option value="Canada">Canada</option>
-          <option value="United Kingdom">United Kingdom</option>
-        </select>
+        <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
+          Please select 3 different countries in order of preference.
+        </p>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div>
+            <label
+              htmlFor="preferredCountry1"
+              className="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-1"
+            >
+              1st Choice
+            </label>
+            <select
+              id="preferredCountry1"
+              className={`${inputClass} ${
+                errors.preferredCountries ? "border-red-500" : ""
+              }`}
+              value={formData.preferredCountry1}
+              onChange={(e) =>
+                handleInputChange("preferredCountry1", e.target.value)
+              }
+            >
+              {getAvailableCountriesFor("preferredCountry1").map((country) => (
+                <option key={country} value={country}>
+                  {country}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <label
+              htmlFor="preferredCountry2"
+              className="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-1"
+            >
+              2nd Choice
+            </label>
+            <select
+              id="preferredCountry2"
+              className={`${inputClass} ${
+                errors.preferredCountries ? "border-red-500" : ""
+              }`}
+              value={formData.preferredCountry2}
+              onChange={(e) =>
+                handleInputChange("preferredCountry2", e.target.value)
+              }
+            >
+              {getAvailableCountriesFor("preferredCountry2").map((country) => (
+                <option key={country} value={country}>
+                  {country}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <label
+              htmlFor="preferredCountry3"
+              className="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-1"
+            >
+              3rd Choice
+            </label>
+            <select
+              id="preferredCountry3"
+              className={`${inputClass} ${
+                errors.preferredCountries ? "border-red-500" : ""
+              }`}
+              value={formData.preferredCountry3}
+              onChange={(e) =>
+                handleInputChange("preferredCountry3", e.target.value)
+              }
+            >
+              {getAvailableCountriesFor("preferredCountry3").map((country) => (
+                <option key={country} value={country}>
+                  {country}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        {errors.preferredCountries && (
+          <p className="text-red-500 text-sm mt-2">
+            {errors.preferredCountries}
+          </p>
+        )}
       </div>
 
       {/* LinkedIn / Portfolio */}
