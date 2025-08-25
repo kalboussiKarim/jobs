@@ -570,7 +570,7 @@ const ApplyForm: React.FC = () => {
             : "bg-gradient-to-r from-blue-600 via-blue-500 to-blue-400 hover:bg-gradient-to-r hover:from-blue-700 hover:via-blue-600 hover:to-blue-500 hover:scale-101"
         } text-white`}
       >
-        {isSubmitting ? t("fgdfg") : "Submit Application"}
+        {isSubmitting ? t("Submitting...") : "Submit Application"}
       </button>
     </form>
   );
