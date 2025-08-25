@@ -21,7 +21,10 @@ const AboutSection: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Image Placeholder */}
           <div className=" rounded-lg h-64 flex items-center justify-center">
-            <img src={"./about3.png"} />
+            <img
+              src={"./about3.png"}
+              alt="About our company - Professional team working together"
+            />
           </div>
 
           {/* Text content */}

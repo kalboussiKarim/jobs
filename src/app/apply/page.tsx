@@ -4,7 +4,7 @@ import { Metadata } from "next";
 import ApplyHeader from "../features/apply/applyFormComponents/ApplyTitle";
 
 export const metadata: Metadata = {
-  title: "Apply Now",
+  title: "Apply Now - Horizon Talents",
   description: "Submit your application to join our program.",
 };
 
