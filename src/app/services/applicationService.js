@@ -40,7 +40,7 @@ export class ApplicationService {
       const response = await db.applications.create(applicationData);
 
       // Email functionality removed - application saved successfully
-      console.log("Application saved successfully:", response);
+      //console.log("Application saved successfully:", response);
 
       return {
         success: true,
