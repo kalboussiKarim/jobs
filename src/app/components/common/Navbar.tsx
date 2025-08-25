@@ -5,6 +5,7 @@ import { Menu, X, Globe, Sun, Moon } from "lucide-react";
 import { useLanguage } from "../../lib/LanguageContext";
 import { useTheme } from "../../lib/ThemeContext";
 import { usePathname } from "next/navigation";
+import Link from "next/link"; // Add this import
 
 interface Language {
   code: string;
@@ -49,9 +50,11 @@ const Navbar: React.FC = () => {
           {/* Logo */}
           <div className="flex items-center">
             <div className="flex-shrink-0">
-              <h1 className="text-3xl font-bold text-gray-800 dark:text-white">
-                Horizon Talents
-              </h1>
+              <Link href="/">
+                <h1 className="text-3xl font-bold text-gray-800 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer">
+                  Horizon Talents
+                </h1>
+              </Link>
             </div>
           </div>
 
