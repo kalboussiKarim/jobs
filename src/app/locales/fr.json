@@ -78,5 +78,47 @@
   "AboutSection": {
     "title": "À propos de nous",
     "description": "Nous sommes spécialisés dans la mise en relation de professionnels qualifiés originaires de l'extérieur de l'UE, en particulier de Tunisie, du Maroc et d'Algérie, avec des opportunités d'emploi à travers l'Europe. Notre mission est de simplifier le processus de recrutement international en offrant un accompagnement personnalisé, une expertise juridique et un accès à un large réseau d'entreprises partenaires à la recherche de talents."
+  },
+  "ApplyHeader": {
+    "title": "Postulez maintenant",
+    "subtitle1": "Les champs marqués d'un ",
+    "subtitle2": " sont obligatoires."
+  },
+  "ApplyForm": {
+    "firstname": "Prénom",
+    "lastname": "Nom de famille",
+    "email": "Adresse e-mail",
+    "birthdate": "Date de naissance",
+    "FormExperience": {
+      "title": "Expérience",
+      "noExperience": "Aucune expérience ajoutée pour le moment. Cliquez sur \"Ajouter une expérience\" pour ajouter votre expérience professionnelle (optionnel).",
+      "addExperience": "Ajouter une expérience",
+      "yearsExperience": "Années d'expérience",
+      "descriptionExperience": "Description de l'expérience",
+      "removeExperience": "Supprimer"
+    },
+    "diploma": "Diplôme le plus élevé obtenu",
+    "frenchLevel": "Niveau de français",
+    "englishLevel": "Niveau d'anglais",
+    "targetJob": "Métier cible",
+    "availability": "Disponibilité",
+    "availabilityMonths": "mois",
+    "availabilityMonth": "mois",
+    "phoneNumber": "Numéro de téléphone",
+    "linkedin": "Profil LinkedIn ou URL du portfolio (optionnel)",
+    "resume": "Télécharger le CV (PDF/DOC, max 1MB)",
+    "resumeDescription1": "Déposez le fichier ici ...",
+    "resumeDescription2": "Glissez-déposez votre CV ici, ou cliquez pour sélectionner un fichier",
+    "countriesSelect": {
+      "title": "Pays préférés (Sélectionnez 3)",
+      "description": "Veuillez sélectionner 3 pays différents par ordre de préférence.",
+      "choice1": "1er choix",
+      "choice2": "2e choix",
+      "choice3": "3e choix"
+    },
+    "security": {
+      "title": "Vérification de sécurité",
+      "description": "Veuillez résoudre ce simple problème de mathématiques pour vérifier que vous êtes humain :"
+    }
   }
 }

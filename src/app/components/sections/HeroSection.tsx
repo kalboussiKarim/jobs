@@ -23,7 +23,7 @@ const HeroSection: React.FC = () => {
         </p>
 
         <a
-          href="#process"
+          href="#services"
           className="inline-flex items-center px-6 py-3 text-base font-medium bg-white text-blue-700 rounded-lg shadow hover:bg-gray-100 transition"
         >
           {t("hero.button")} <ArrowRight className="ml-2 w-4 h-4" />

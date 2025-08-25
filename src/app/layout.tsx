@@ -9,6 +9,7 @@ import Footer from "./components/common/Footer";
 import { ThemeProvider } from "./lib/ThemeContext";
 import WhatsAppBubble from "./components/common/WhatsAppBubble";
 import { AuthProvider } from "./lib/AuthContext";
+import { Metadata } from "next";
 
 const inter = Inter({ subsets: ["latin"] });
 

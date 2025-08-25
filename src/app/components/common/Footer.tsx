@@ -101,44 +101,6 @@ const Footer: React.FC = () => {
             </div>
           </div>
 
-          {/* Quick Links */}
-          <div>
-            <h3 className="text-lg font-semibold mb-6 text-white">
-              {t("common.footer.quickLinks")}
-            </h3>
-            <ul className="space-y-3">
-              {quickLinks.map((link) => (
-                <li key={link.key}>
-                  <a
-                    href={link.href}
-                    className="text-gray-300 dark:text-gray-400 hover:text-white dark:hover:text-gray-200 transition-colors text-sm"
-                  >
-                    {t("common.footer" + link.key)}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Services */}
-          <div>
-            <h3 className="text-lg font-semibold mb-6 text-white">
-              {t("common.footer.services")}
-            </h3>
-            <ul className="space-y-3">
-              {serviceLinks.map((service) => (
-                <li key={service.key}>
-                  <a
-                    href={service.href}
-                    className="text-gray-300 dark:text-gray-400 hover:text-white dark:hover:text-gray-200 transition-colors text-sm"
-                  >
-                    {t("common.footer" + service.key)}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
           {/* Contact Info */}
           <div>
             <h3 className="text-lg font-semibold mb-6 text-white">
@@ -199,12 +161,6 @@ const Footer: React.FC = () => {
                 className="text-gray-400 dark:text-gray-500 hover:text-white dark:hover:text-gray-200 transition-colors text-sm"
               >
                 {t("common.footer.termsOfService")}
-              </a>
-              <a
-                href="#"
-                className="text-gray-400 dark:text-gray-500 hover:text-white dark:hover:text-gray-200 transition-colors text-sm"
-              >
-                {t("common.footer.cookiePolicy")}
               </a>
             </div>
           </div>

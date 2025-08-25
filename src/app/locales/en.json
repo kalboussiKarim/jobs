@@ -79,5 +79,48 @@
   "AboutSection": {
     "title": "About us",
     "description": "We specialize in connecting skilled professionals from outside the EU, particularly from Tunisia, Morocco, and Algeria, with job opportunities across Europe. Our mission is to simplify the international hiring process by offering personalized support, legal expertise, and access to a wide network of partner companies seeking qualified talent."
+  },
+
+  "ApplyHeader": {
+    "title": "Apply Now",
+    "subtitle1": "Fields marked with ",
+    "subtitle2": " are required."
+  },
+  "ApplyForm": {
+    "firstname": "First Name",
+    "lastname": "Last Name",
+    "email": "Email Address",
+    "birthdate": "Date of Birth",
+    "FormExperience": {
+      "title": "Experience",
+      "noExperience": "No experiences added yet. Click \"Add Experience\" to add your work experience (optional).",
+      "addExperience": "Add Experience",
+      "yearsExperience": "Years of Experience",
+      "descriptionExperience": "Experience Description",
+      "removeExperience": "Remove"
+    },
+    "diploma": "Highest Diploma Obtained",
+    "frenchLevel": "French Level",
+    "englishLevel": "English Level",
+    "targetJob": "Target Job",
+    "availability": "Availability",
+    "availabilityMonths": "months",
+    "availabilityMonth": "month",
+    "phoneNumber": "Phone Number",
+    "linkedin": "LinkedIn Profile or Portfolio URL (optional)",
+    "resume": "Upload Resume (PDF/DOC, max 1MB)",
+    "resumeDescription1": "Drop the file here ...",
+    "resumeDescription2": "Drag and drop your resume here, or click to select file",
+    "countriesSelect": {
+      "title": "Preferred Countries (Select 3)",
+      "description": "Please select 3 different countries in order of preference.",
+      "choice1": "1st Choice",
+      "choice2": "2nd Choice",
+      "choice3": "3rd Choice"
+    },
+    "security": {
+      "title": "Security Check",
+      "description": "Please solve this simple math problem to verify you're human:"
+    }
   }
 }

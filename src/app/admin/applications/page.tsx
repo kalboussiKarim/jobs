@@ -70,7 +70,7 @@ export default function AdminApplications() {
   };
 
   // Fixed resume viewing function
-  const handleViewResume = async (resumeId: string) => {
+  /*const handleViewResume = async (resumeId: string) => {
     try {
       // Get the file view URL - this returns a URL object
       const fileViewUrl = st.resumes.getFileView(resumeId);
@@ -82,6 +82,7 @@ export default function AdminApplications() {
       setError("Failed to view resume: " + err.message);
     }
   };
+  */
 
   // Fixed resume download function
   const handleDownloadResume = async (
@@ -272,6 +273,9 @@ export default function AdminApplications() {
                   <thead className="bg-gray-200 dark:bg-gray-700">
                     <tr>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                        Actions
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                         Applicant
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
@@ -289,12 +293,9 @@ export default function AdminApplications() {
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                         Languages
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                      {/*<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                         Applied
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                        Actions
-                      </th>
+                      </th>*/}
                     </tr>
                   </thead>
                   <tbody className="bg-gray-100 dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
@@ -309,6 +310,55 @@ export default function AdminApplications() {
                           key={application.$id}
                           className="hover:bg-gray-200 dark:hover:bg-gray-700"
                         >
+                          <td className="px-6 py-4 text-center text-sm font-medium">
+                            <div className="flex flex-col items-center space-y-1">
+                              <button
+                                onClick={() =>
+                                  setSelectedApplication(application)
+                                }
+                                className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300"
+                              >
+                                View Details
+                              </button>
+                              {application.resumeURL && (
+                                <>
+                                  {/*
+                                  <button
+                                    onClick={() =>
+                                      handleViewResume(application.resumeURL!)
+                                    }
+                                    className="text-green-600 hover:text-green-900 dark:text-green-400 dark:hover:text-green-300"
+                                  >
+                                    View Resume
+                                  </button>
+                                  */}
+                                  <button
+                                    onClick={() =>
+                                      handleDownloadResume(
+                                        application.resumeURL!,
+                                        `${application.firstName}_${application.lastName}`
+                                      )
+                                    }
+                                    className="text-purple-600 hover:text-purple-900 dark:text-purple-400 dark:hover:text-purple-300"
+                                  >
+                                    Download Resume
+                                  </button>
+                                </>
+                              )}
+                              <button
+                                onClick={() =>
+                                  handleDeleteApplication(
+                                    application.$id,
+                                    `${application.firstName} ${application.lastName}`
+                                  )
+                                }
+                                className="mr-6 ml-6 text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300"
+                                title="Delete Application"
+                              >
+                                Delete
+                              </button>
+                            </div>
+                          </td>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <div>
                               <div className="text-sm font-medium text-gray-900 dark:text-white">
@@ -362,61 +412,14 @@ export default function AdminApplications() {
                               EN: {application.englishLevel}
                             </div>
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
+                          {/*<td className="px-6 py-4 whitespace-nowrap">
                             <div className="text-sm text-gray-900 dark:text-white">
                               {date}
                             </div>
                             <div className="text-sm text-gray-500 dark:text-gray-400">
                               {time}
                             </div>
-                          </td>
-                          <td className="px-6 py-4 text-center text-sm font-medium">
-                            <div className="flex flex-col items-center space-y-1">
-                              <button
-                                onClick={() =>
-                                  setSelectedApplication(application)
-                                }
-                                className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300"
-                              >
-                                View Details
-                              </button>
-                              {application.resumeURL && (
-                                <>
-                                  <button
-                                    onClick={() =>
-                                      handleViewResume(application.resumeURL!)
-                                    }
-                                    className="text-green-600 hover:text-green-900 dark:text-green-400 dark:hover:text-green-300"
-                                  >
-                                    View Resume
-                                  </button>
-                                  <button
-                                    onClick={() =>
-                                      handleDownloadResume(
-                                        application.resumeURL!,
-                                        `${application.firstName}_${application.lastName}`
-                                      )
-                                    }
-                                    className="text-purple-600 hover:text-purple-900 dark:text-purple-400 dark:hover:text-purple-300"
-                                  >
-                                    Download
-                                  </button>
-                                </>
-                              )}
-                              <button
-                                onClick={() =>
-                                  handleDeleteApplication(
-                                    application.$id,
-                                    `${application.firstName} ${application.lastName}`
-                                  )
-                                }
-                                className="mr-6 ml-6 text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300"
-                                title="Delete Application"
-                              >
-                                Delete
-                              </button>
-                            </div>
-                          </td>
+                          </td>*/}
                         </tr>
                       );
                     })}
@@ -682,14 +685,14 @@ export default function AdminApplications() {
               <div className="flex justify-end mt-6 space-x-3">
                 {selectedApplication.resumeURL && (
                   <>
-                    <button
+                    {/*<button
                       onClick={() =>
                         handleViewResume(selectedApplication.resumeURL!)
                       }
                       className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 text-sm font-medium"
                     >
                       View Resume
-                    </button>
+                    </button>*/}
                     <button
                       onClick={() =>
                         handleDownloadResume(

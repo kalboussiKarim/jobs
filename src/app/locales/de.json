@@ -77,5 +77,47 @@
   "AboutSection": {
     "title": "Über uns",
     "description": "Wir sind darauf spezialisiert, qualifizierte Fachkräfte von außerhalb der EU, insbesondere aus Tunesien, Marokko und Algerien, mit Jobmöglichkeiten in ganz Europa zu verbinden. Unsere Mission ist es, den internationalen Einstellungsprozess zu vereinfachen, indem wir persönliche Unterstützung, juristische Expertise und Zugang zu einem breiten Netzwerk von Partnerunternehmen bieten, die nach qualifizierten Talenten suchen."
+  },
+  "ApplyHeader": {
+    "title": "Jetzt bewerben",
+    "subtitle1": "Felder, die mit ",
+    "subtitle2": " markiert sind, sind erforderlich."
+  },
+  "ApplyForm": {
+    "firstname": "Vorname",
+    "lastname": "Nachname",
+    "email": "E-Mail-Adresse",
+    "birthdate": "Geburtsdatum",
+    "FormExperience": {
+      "title": "Erfahrung",
+      "noExperience": "Keine Erfahrungen hinzugefügt. Klicken Sie auf \"Erfahrung hinzufügen\", um Ihre Berufserfahrung (optional) hinzuzufügen.",
+      "addExperience": "Erfahrung hinzufügen",
+      "yearsExperience": "Jahre Erfahrung",
+      "descriptionExperience": "Beschreibung der Erfahrung",
+      "removeExperience": "Erfahrung entfernen"
+    },
+    "diploma": "Höchster erreichter Abschluss",
+    "frenchLevel": "Französischkenntnisse",
+    "englishLevel": "Englischkenntnisse",
+    "targetJob": "Zielberuf",
+    "availability": "Verfügbarkeit",
+    "availabilityMonths": "Monate",
+    "availabilityMonth": "Monat",
+    "phoneNumber": "Telefonnummer",
+    "linkedin": "LinkedIn-Profil oder Portfolio-URL (optional)",
+    "resume": "Lebenslauf hochladen (PDF/DOC, max. 1MB)",
+    "resumeDescription1": "Ziehen Sie die Datei hierher ...",
+    "resumeDescription2": "Ziehen Sie Ihren Lebenslauf hierher oder klicken Sie, um eine Datei auszuwählen",
+    "countriesSelect": {
+      "title": "Bevorzugte Länder (Wählen Sie 3)",
+      "description": "Bitte wählen Sie 3 verschiedene Länder in der Reihenfolge Ihrer Präferenz.",
+      "choice1": "1. Wahl",
+      "choice2": "2. Wahl",
+      "choice3": "3. Wahl"
+    },
+    "security": {
+      "title": "Sicherheitsprüfung",
+      "description": "Bitte lösen Sie dieses einfache Mathematikproblem, um zu bestätigen, dass Sie ein Mensch sind:"
+    }
   }
 }
